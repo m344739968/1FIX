@@ -1,0 +1,116 @@
+﻿@using _1Fix.Entity
+@{
+    Layout = null;
+    SellAddress selladdress = ViewBag.SellAdress as SellAddress;
+    List<SellPhoneModel> sellphonemodellist = ViewBag.SellPhoneModelList as List<SellPhoneModel>;
+}
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">填写寄售信息</h4>
+</div>@using (Ajax.BeginForm("SaveSellBaseInfo", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editSellBaseInfoForm" }))
+{
+    <div class="modal-body">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">手机型号：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <select class="form-control" name="PhoneModelID">
+                        @foreach (SellPhoneModel item in sellphonemodellist)
+                        {
+                            <option value="@item.ID">@item.PhoneName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">您的姓名：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <input type="text" required="" value="" class="form-control" placeholder="您的姓名" name="ContactName">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">联系电话：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <input type="text" required="" value="" class="form-control" placeholder="联系电话" name="ContactPhone">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">IMEI串号：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <input type="text" required="" value="" class="form-control" placeholder="IMEI串号:在拨号面板输入*#06#即可查看IMEI码" name="Sn">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">快递单号：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <input type="text" required="" value="" class="form-control" placeholder="快递单号" name="CourierNo">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">寄售地址：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    @selladdress.SellAddress1
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">收件人：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    @selladdress.Receiver
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">联系电话：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    @selladdress.ReceiverPhone
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="SellAddressID" value="@selladdress.ID" />
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary" style="margin: auto; background-color: #f08300; border-color: #f08300;">保存</button>
+    </div>
+}
+
+<script type="text/javascript">
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal1').modal('hide');
+        }
+    }
+    jQuery("#editSellBaseInfoForm").validate({
+        rules: {
+            ContactName: {
+                required: true
+            },
+            ContactPhone: {
+                required: true
+            },
+            Sn: {
+                required: true
+            },
+            CourierNo: {
+                required: true
+            }
+        },
+        messages: {
+            ContactName: {
+                required: "请输入您的姓名"
+            },
+            ContactPhone: {
+                required: "请输入您的联系电话"
+            },
+            Sn: {
+                required: "请输入IMEI串号"
+            },
+            CourierNo: {
+                required: "请输入快递单号"
+            }
+        }, errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+</script>

@@ -1,0 +1,216 @@
+﻿@{
+    Layout = null;
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhone>
+@{ int i = 1;}
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            @*<th>#</th>*@
+            <th>ID</th>
+            <th></th>
+            <th>寄卖人</th>
+            <th>性别</th>
+            <th>所在城市</th>
+            <th>IMEI</th>
+            <th>手机品牌</th>
+            <th>颜色</th>
+            <th>容量</th>
+            <th>等级</th>
+            <th>个人价格(元)</th>
+            <th>企业价格(元)</th>
+            <th>大客户价格(元)</th>
+            <th>状态</th>
+            <th>检测报告</th>
+            <th>修改价格</th>
+            <th>上架</th>
+            <th>下架</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.SellPhone.ID</td>
+                <td>
+                    <img style="border-radius: 50px;vertical-align: middle;width:36px;" src="@item.UserInfo.headimgurl" alt="">
+                </td>
+                <td>@item.UserInfo.nickname</td>
+                <td>
+                    @if (item.UserInfo.sex == 1)
+                    {
+                        <span>男</span>
+                    }
+                    else
+                    {
+                        <span>女</span>
+                    }
+                </td>
+                <td>@item.UserInfo.country - @item.UserInfo.province - @item.UserInfo.city</td>
+                <td>@item.CheckFacility.sn</td>
+                <td>@item.SellBaseInfo.PhoneModel</td>
+                <td>@item.CheckFacility.color</td>
+                <td>@item.CheckFacility.size</td>
+                <td>@item.CheckFacility.jb</td>
+                <td>@item.SellPhone.PersonPrice</td>
+                <td>@item.SellPhone.EnterprisePrice</td>
+                <td>@item.SellPhone.BigCustomerPrice</td>
+                <td>
+                    @if (item.SellPhone.Status == -1)
+                    {
+                        <span style="">未上架</span>
+                    }
+                    else if (item.SellPhone.Status == 0)
+                    {
+                        <span style="">上架</span>
+                    }
+                    else if (item.SellPhone.Status == 1)
+                    {
+                        <span style="">已下单,未付款</span>
+                    }
+                    else if (item.SellPhone.Status == 2)
+                    {
+                        <span style="">已付款,等待发货</span>
+                    }
+                    else if (item.SellPhone.Status == 3)
+                    {
+                        <span>已发货</span>
+                    }
+                    else if (item.SellPhone.Status == 4)
+                    {
+                        <span>交易成功</span>
+                    }
+                    else if (item.SellPhone.Status == 5)
+                    {
+                        <span>下架</span>
+                    }
+                </td>
+                <td class="table-success">
+                    <a href="#" onclick="showModal1('@item.SellPhone.Sn')" data-toggle="modal"><i class="fa fa-list-alt"></i></a>
+                </td>
+                <td class="table-success">
+                    <a href="#" onclick="showModal2('@item.SellPhone.SellBaseInfoID')" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                </td>
+                <td class="table-success">
+                    <a href="#" onclick="updown(0,@item.SellBaseInfo.Status,@item.SellBaseInfo.ID)" data-toggle="modal"><i class="fa fa-level-up"></i></a>
+                </td>
+                <td class="table-success">
+                    <a href="#" onclick="updown(5,@item.SellBaseInfo.Status,@item.SellBaseInfo.ID)" data-toggle="modal"><i class="fa fa-level-down"></i></a>
+                </td>
+            </tr>
+                    i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-6">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(sn){
+        $("#myModal1").modal({
+            remote: "/Consignment/Phone?sn="+sn
+        });
+    }
+
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal2").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //修改价格
+    function showModal2(sellbaseinfoid){
+        $("#myModal2").modal({
+            remote: "/Consignment/Price?id="+sellbaseinfoid
+        });
+    }
+
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal3").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //上架操作
+    function showModal3(status,id){
+        $("#myModal3").modal({
+            remote: "/Consignment/UpDown?status="+status+"&id="+id
+        });
+    }
+    //上下架操作
+    function updown(status,auditStatus,id) {
+        var s="";
+        if(auditStatus==1){
+            if(status==0){
+                s="上架";
+            }else if(status==5){
+                s="下架";
+            }
+            $.ajax({
+                type: "post",
+                url: "/Consignment/SaveUpDown",
+                data: {id:id, status:status},
+                success: function (data) {
+                    if(data.status>0){
+                        alert(s+"操作成功");
+                        window.location.href=window.location.href;
+                    }else if(data.status==-1)
+                    {
+                        alert("只有未上架状态，才可以上架，不可以重复操作");
+                    }
+                    else if(data.status==-2)
+                    {
+                        alert("只有上架状态，才可以下架，不可以重复操作");
+                    }else
+                    {
+                        alert(s+"操作失败");
+                    }
+                }
+            });
+        }else
+        {
+            alert("没有审核通过，不能上、下架");
+        }
+    }
+</script>

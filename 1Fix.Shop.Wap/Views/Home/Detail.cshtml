@@ -1,0 +1,293 @@
+﻿@using _1Fix.Entity
+@using _1Fix.Entity.Model
+@model CuSellPhone
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<CheckImages> CheckImagesList = ViewBag.CheckImagesList as List<CheckImages>;
+    var n = 0;
+}
+@if (Model == null)
+{
+    <div class="center">哦哦，抱歉，暂无详情</div>
+}
+else
+{
+    <div class="container">
+        <div class="nav">
+            <!-- -->
+            <div class="row liDetail">
+                <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><</span></div>
+                <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我要购买>商品详情</span></div>
+                <!-- -->
+                <div class="col-xs-1 col-sm-4">
+                    <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+                </div>
+            </div>
+            <!-- -->
+            <div class="page-header">
+                @Html.Partial("~/Views/Shared/TopNav.cshtml")
+            </div>
+        </div>
+        <div class="contant">
+            <hr class="hrlist" />
+            <!--图片轮播 -->
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    @*<div class="item active">
+                        <img src="http://jy.1fix.cn/Upload/013066004861304/20150827010535179.jpg" style="height:213px;" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <img src="http://jy.1fix.cn/Upload/013066004861304/20150827010550444.jpg" style="height:213px;" class="img-responsive" />
+                    </div>*@
+                    @foreach (var item in CheckImagesList)
+                    {
+                        if (n == 0)
+                        {
+                            <div class="item active">
+                                <img src="@_1Fix.Common.Global.ShopDomain/Upload/@(item.Sn)/@(item.Image)" class="img-responsive">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="item">
+                                <img src="@_1Fix.Common.Global.ShopDomain/Upload/@(item.Sn)/@(item.Image)" class="img-responsive">
+                            </div>
+                        }
+                        n++;
+                    }
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <div class="font list">
+                <p class="font-big">@Model.CheckFacility.phonename @Model.CheckFacility.size @Model.CheckFacility.color @Model.CheckFacility.nettype</p>
+                <p class="font-small">
+                    产品编号：@Model.CheckFacility.sn
+                    @if (Model.CheckFacility.jb != null)
+                    {
+                        if (Model.CheckFacility.jb.Trim() == "G")
+                        {
+                            <span>GD级</span>
+                        }
+                        else if (Model.CheckFacility.jb.Trim() == "F")
+                        {
+                            <span>FR级</span>
+                        }
+                        else
+                        {
+                            <span>@(Model.CheckFacility.jb)级</span>
+                        }
+                    }
+                </p>
+                @if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser == null)
+                {
+                    <span class="pricelist">￥@(Model.SellPhone.PersonPrice)</span>
+                }
+                else
+                {
+                    if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "3")
+                    {
+                        <span class="pricelist">￥@(Model.SellPhone.BigCustomerPrice)</span>
+                    }
+                    else if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "2")
+                    {
+                        <span class="pricelist">￥@(Model.SellPhone.EnterprisePrice)</span>
+                    }
+                    else
+                    {
+                        <span class="pricelist">￥@(Model.SellPhone.PersonPrice)</span>
+                    }
+                }
+            </div>
+            <div class="excellentRx">
+                <table width="98%" height="auto">
+                    <tr>
+                        <td><img src="/images/ex.png" /></td>
+                        <td><img src="/images/vg.png" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Excellent:完美</p>
+                            <p class="little">全新原装机器,未拆分,未激活完美无暇</p>
+                        </td>
+                        <td>
+                            <p>Very good:精品</p>
+                            <p class="little">功能完全正常,轻微难以发现的使用痕迹</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="/images/gd.png" /></td>
+                        <td><img src="/images/fr.png" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Good:良品</p>
+                            <p class="little">功能完全正常,轻微使用痕迹</p>
+                        </td>
+                        <td>
+                            <p>Fair:平白</p>
+                            <p class="little">功能完全正常,外观有轻微划痕</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr class="hrlist" />
+            <div class="tableJian">
+                <p>功能检测</p>
+                <p>
+                    <span><img src="/images/new_iphone/config_normal_0.png" />基本全新</span>
+                    <span><img src="/images/new_iphone/config_normal_1.png" />正常磨损</span>
+                    <span><img src="/images/new_iphone/config_normal_2.png" />严重磨损</span>
+                    <span><img src="/images/new_iphone/config_normal_3.png" />无此配件或已损坏</span>
+                </p>
+                <table width="100%" height="auto">
+                    <tr class="pinkT">
+                        <td>边框顶部</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frametop).png" /></td>
+                        <td class="bor-gekai">受潮情况</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.wet).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>边框底部</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.framebottom).png" /></td>
+                        <td class="bor-gekai">内部标识</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.insidelabel).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>边框左侧</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameleft).png" /></td>
+                        <td class="bor-gekai">屏蔽罩</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.shield).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>边框右侧</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameright).png" /></td>
+                        <td class="bor-gekai">零部件位置</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.Partslocation).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>后壳</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.rearcover).png" /></td>
+                        <td class="bor-gekai">陀螺内齿</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.screwtooth).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>外屏</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.glass).png" /></td>
+                        <td class="bor-gekai">开机排线</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.PowerCable).png" /> </td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>底部螺丝</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.bottomscrew).png" /></td>
+                        <td class="bor-gekai">侧键排线</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.FrameButtonCable).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>亮度调节</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.brightness).png" /></td>
+                        <td class="bor-gekai">尾插排线</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.ChargeCable).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>屏幕白黑红色</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.whiteblackreddisplay).png" /></td>
+                        <td class="bor-gekai">返回排线</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.HomeButtonCable).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>触摸灵敏度</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.sensitivity).png" /></td>
+                        <td class="bor-gekai">硬盘套件</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.disks).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>开机键</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.powerbutton).png" /></td>
+                        <td class="bor-gekai">CPU</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.CPU).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>升音量键</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.volumeup).png" /></td>
+                        <td class="bor-gekai">Wi-Fi</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.wifi).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>降音量键</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.volumedown).png" /></td>
+                        <td class="bor-gekai">蓝牙</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.bluetooth).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>Home键</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.homebutton).png" /></td>
+                        <td class="bor-gekai">麦克风</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.microphone).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>卡槽</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.cardslot).png" /></td>
+                        <td class="bor-gekai">闪光灯</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.flash).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>陀螺仪</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.gyroscope).png" /></td>
+                        <td class="bor-gekai">摄像</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.shooting).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>照相</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.camera).png" /></td>
+                        <td class="bor-gekai">电池</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.battery).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>信号</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.signal).png" /></td>
+                        <td class="bor-gekai">震动</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.vibration).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>耳机插口</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.headsethole).png" /></td>
+                        <td class="bor-gekai">听筒</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.receiver).png" /></td>
+                    </tr>
+                    <tr class="greenT">
+                        <td>充电插口</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.chargehole).png" /></td>
+                        <td class="bor-gekai">铃声</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.speaker).png" /></td>
+                    </tr>
+                    <tr class="pinkT">
+                        <td>指纹功能</td>
+                        <td class="booot"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.fingerprint).png" /></td>
+                        <td class="bor-gekai"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="pink-share">
+                <div class="pink-first btnList" style="cursor:pointer;" onclick="buy('@Model.CheckFacility.sn')">
+                    <a href="javascript:;"> <input type="button" value="立即购买" class="btn-orange" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    //立即购买
+    function buy(sn) {
+        window.location.href = "/Home/Order?sn=" + sn;
+    }
+</script>

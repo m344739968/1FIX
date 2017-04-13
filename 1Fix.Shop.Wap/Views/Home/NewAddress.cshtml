@@ -1,0 +1,154 @@
+﻿@using _1Fix.Entity
+@model UserAddress
+@{
+    ViewBag.Title = "NewAddress";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+    var id = Model.ID;
+    var sn = Request["sn"];
+}
+<style type="text/css">
+    .time1-active {
+        background-color: #ff971b;
+        color: #fff;
+    }
+</style>
+<!--省市区三级联动-->
+<script src="~/js/PCASClass.js" charset="gb2312"></script>
+@using (Ajax.BeginForm("SaveUserAddress", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successNewAddress" }, new { id = "editUserAddressForm" }))
+{
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <h3 class="Delivered">收货信息</h3>
+        </div>
+        <div class="col-md-12"> </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <span class="img-01"><img src="/images/user.png" class="img-responsive img-responsive-03" alt="Responsive image" /></span> <span class="textcolor">
+                <input type="text" id="user_name" name="user_name" value="@Model.user_name" placeholder="请输入姓名" class="textWord-01" style="border-style: none; background: #f7f7f7; " />
+            </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <span class="img-01"><img src="/images/phone.png" class="img-responsive img-responsive-03" alt="Responsive image" /></span> <span class="textcolor">
+                <input type="text" id="user_phone" name="user_phone" value="@Model.user_phone" placeholder="请输入手机号码" class="textWord-01" style="border-style:none" />
+            </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <span class="img-01"><img src="/images/time.png" class="img-responsive img-responsive-03" alt="Responsive image" /></span> <span class="textcolor">
+                <button class="btn btn-default btn-01-1 time1-active" name="touch_time_" value="时间不限" type="button">时间不限</button>
+                <button class="btn btn-default btn-01" name="touch_time_" value="9:00-12:00" type="button">9:00-12:00</button>
+                <button class="btn btn-default btn-01" name="touch_time_" value="12:00-18:00" type="button">12:00-18:00</button>
+                <button class="btn btn-default btn-01" name="touch_time_" value="18:00-21:00" type="button">18:00-21:00</button>
+                <input type="text" style="display:none" id="touch_time" value="时间不限" name="touch_time" />
+            </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <span class="img-01"><img src="/images/location-pin.png" class="img-responsive img-responsive-03" alt="Responsive image" /></span> <span class="textcolor">
+                <tr>
+                    <th>用户地址：</th>
+                    <td>
+                        <select id="province" name="province"></select>
+                        &nbsp;
+                        <select id="city" name="city"></select>
+                    </td>
+                </tr>
+            </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <span class="img-01"><img src="/images/home_2.png" class="img-responsive img-responsive-03" alt="Responsive image" /></span> <span class="textcolor">
+                <input type="text" id="user_address" name="user_address" value="@Model.user_address" placeholder="详细地址、楼号、单元和门牌号" class="textWord-01" style="border-style:none" />
+            </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1-1"></div>
+        <div class="col-md-12 col-xs-12 col-md-1-02">
+            <div id="divMsg"></div>
+            <span class="img-01">
+                <input type="hidden" name="id" value="@Model.ID" />
+                <button class="btn btn-default btn-02" onclick="return beforeSubmitAddress()" type="submit"> 保存并使用</button>
+            </span> <span class="textcolor"> </span>
+            <div class="col-md-1-1"></div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("button[name='touch_time_']").click(function () {
+            $("button[name='touch_time_']").removeClass("time1-active");
+            $(this).addClass("time1-active");
+            $("#touch_time").val($(this).attr("value"));
+        });
+        var id = "@id";
+        var time = "@Model.touch_time";
+        var province = "@Model.province";
+        var city = "@Model.city";
+        if (id > 0) {
+            $("button[name='touch_time_']").removeClass("time1-active");
+            $("button[name='touch_time_']").each(function () {
+                if ($(this).attr("value") == time) {
+                    $(this).addClass("time1-active");
+                    $("#touch_time").val($(this).attr("value"));
+                }
+            });
+            new PCAS("province", "city", province, city);
+        } else {
+            new PCAS("province", "city");
+        }
+    });
+    //提交地址前验证填写信息
+    function beforeSubmitAddress() {
+        if (valid()) {
+            return true;
+        }
+        return false;
+    };
+    //验证数据
+    function valid() {
+        if ($("#user_name").val() == "") {
+            $("#divMsg").html("<label class=\"error\">请输入姓名</label>");
+            return false;
+        }
+        if ($("#user_phone").val() == "") {
+            $("#divMsg").html("<label class=\"error\">请输入手机号码</label>");
+            return false;
+        }
+        if ($("#province").val() == "" || $("#city").val() == "") {
+            $("#divMsg").html("<label class=\"error\">请选择用户地址</label>");
+            return false;
+        }
+        if ($("#user_address").val() == "") {
+            $("#divMsg").html("<label class=\"error\">详细地址、楼号、单元和门牌号</label>");
+            return false;
+        }
+        return true;
+    };
+    var sn = "@sn";
+    //保存地址成功回调方法
+    function successNewAddress(data) {
+        if (data.status == 1) {
+            location.href = "/Home/Order?sn=" + sn + "&id=" + data.msg;
+        } else {
+            $("#divMsg").html("<label class=\"error\">保存失败，请重新提交</label>");
+        }
+    };
+</script>

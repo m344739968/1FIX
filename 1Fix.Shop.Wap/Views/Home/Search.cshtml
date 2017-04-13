@@ -1,0 +1,252 @@
+﻿@using _1Fix.Utility
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhone>
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string phonemodelid = "";
+    if (Request["phonemodelid"] != null)
+    {
+        phonemodelid = Request["phonemodelid"].ToString();
+    }
+}
+<style type="text/css">
+    .sol {
+        border-color: #EC971F;
+    }
+</style>
+<script type="text/javascript">
+    var flag = 1;
+    function expand() {
+        $("#selDiv").toggle("fast", function () {
+            //alert($(document).width());
+            $(this).css({
+                "width": $(document).width(),
+                "height": $(document).height(),
+                "position": "absolute",
+                "top": "35px",
+                "left": "0px",
+                "z-index": 99,
+                "background-color": "#f7f7f7"
+            });
+        });
+    }
+    //全部
+    function searchAll() {
+        $("#price").val("");
+        $("#jb").val("");
+        $("#phonemodelid").val("");
+        $("#color").val("");
+        //提交表单
+        $("#divSearchSellPhoneListForm").submit();
+    }
+    function closeSelDiv() {
+        $("#selDiv").css({
+            "display": "none",
+        });
+        //提交表单
+        $("#divSearchSellPhoneListForm").submit();
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        var Accordion = function (el, multiple) {
+            this.el = el || {};
+            this.multiple = multiple || false;
+            // Variables privadas
+            var links = this.el.find('.link');
+            // Evento
+            links.on('click', {
+                el: this.el,
+                multiple: this.multiple
+            }, this.dropdown)
+        }
+        Accordion.prototype.dropdown = function (e) {
+            var $el = e.data.el;
+            $this = $(this),
+                $next = $this.next();
+            $next.slideToggle();
+            $this.parent().toggleClass('open');
+            if (!e.data.multiple) {
+                $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+                if ($this.find(".v").hasClass("v01")) {
+                    $this.find('.v').removeClass("v01").addClass("v02");
+                } else {
+                    $this.find('.v').removeClass("v02").addClass("v01");
+                }
+            };
+        }
+        var accordion = new Accordion($('#accordion'), false);
+        /*点击添加样式*/
+        $("div.zhedie ul.accordion li").find(".flostl").click(function () {
+            if ($(this).hasClass("sol")) {
+                $(this).removeClass("sol").siblings().removeClass("sol");
+                $("#" + $(this).attr("name")).val("");
+            } else {
+                $(this).addClass("sol").siblings().removeClass("sol");
+                $("#" + $(this).attr("name")).val($(this).attr("value"));
+            }
+        });
+    });
+
+</script>@using (Ajax.BeginForm("SearchList", "", new AjaxOptions { HttpMethod = "post", UpdateTargetId = "products" }, new { id = "divSearchSellPhoneListForm" }))
+{
+    <div class="container">
+        <div class="nav">
+            <!-- -->
+            <div class="row liDetail">
+                <div class="col-xs-9 col-sm-4 purchasefont-00">
+
+                    <span class="purchasefont-00">
+                        <span class="purchasefont-00" /><img src="/images/search_2.png" />
+                        <input type="text" id="key" name="key" placeholder="搜索二手商品" class="textWord purchasefont-00" />
+                    </span>
+
+                </div>
+                <!-- -->
+                <div class="col-xs-1 col-sm-4">
+                    <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont-011" onclick="test()" />
+                </div>
+            </div>
+            <!-- -->
+            <div class="page-header">
+                @Html.Partial("~/Views/Shared/TopNav.cshtml")
+            </div>
+        </div>
+    </div>
+    <div class="commoditylist" style="position:absolute;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-md-12 col-xs-12 col-md-1-2">
+                    <span onclick="expand()" style="cursor:default;">筛选</span>
+                    <img src="/images/icon_01.png" />
+                    <span onclick="searchAll()">全部</span>
+                    <div class="row" id="selDiv" style="display:none;">
+                        <div class="col-xs-12">
+                            <!--折叠面板-->
+                            <div class="zhedie">
+                                <input type="hidden" id="price" name="price" value="" />
+                                <input type="hidden" id="jb" name="jb" value="" />
+                                <input type="hidden" id="phonemodelid" name="phonemodelid" value="@phonemodelid" />
+                                <input type="hidden" id="color" name="color" value="" />
+                                <ul id="accordion" class="accordion">
+                                    <li>
+                                        <div class="link"><em class="v v01"></em><i class="fa fa-paint-brush"></i>价格<i class="fa fa-chevron-down"></i></div>
+                                        <ul class="submenu">
+                                            <li class="flostl" name="price" value="0,1000"><a href="#">1000以下</a></li>
+                                            <li class="flostl" name="price" value="1000,2000"><a href="#">1000-2000</a></li>
+                                            <li class="flostl" name="price" value="2000,3000"><a href="#">2000-3000</a></li>
+                                            <li class="flostl" name="price" value="3000,0"><a href="#">3000以上</a></li>
+                                        </ul>
+                                    </li>
+                                    <div class="clear"></div>
+                                    <li>
+                                        <div class="link"><em class="v v01"></em><i class="fa fa-code"></i>评级<i class="fa fa-chevron-down"></i></div>
+                                        <ul class="submenu">
+                                            <li class="flostl" name="jb" value="EX"><a href="#">EX级</a></li>
+                                            <li class="flostl" name="jb" value="VG"><a href="#">VG级</a></li>
+                                            <li class="flostl" name="jb" value="G"><a href="#">GD级</a></li>
+                                            <li class="flostl" name="jb" value="F"><a href="#">FR级</a></li>
+                                        </ul>
+                                    </li>
+                                    <div class="clear"></div>
+                                    <li>
+                                        <div class="link"><em class="v v01"></em><i class="fa fa-mobile"></i>型号<i class="fa fa-chevron-down"></i></div>
+                                        <ul class="submenu">
+                                            <li class="flostl" name="phonemodelid" value="7"><a href="#">iPhone 6p</a></li>
+                                            <li class="flostl" name="phonemodelid" value="6"><a href="#">iPhone 6</a></li>
+                                            <li class="flostl" name="phonemodelid" value="5"><a href="#">iPhone 5S</a></li>
+                                            <li class="flostl" name="phonemodelid" value="4"><a href="#">iPhone 5C</a></li>
+                                            <li class="flostl" name="phonemodelid" value="3"><a href="#">iPhone 5</a></li>
+                                            <li class="flostl" name="phonemodelid" value="2"><a href="#">iPhone 4S</a></li>
+                                            <li class="flostl" name="phonemodelid" value="1"><a href="#">iPhone 4</a></li>
+                                        </ul>
+                                    </li>
+                                    <div class="clear"></div>
+                                    <li>
+                                        <div class="link"><em class="v v01"></em><i class="fa fa-globe"></i>颜色<i class="fa fa-chevron-down"></i></div>
+                                        <ul class="submenu">
+                                            <li class="flostl gray" name="color" value="白色"></li>
+                                            <li class="flostl dark" name="color" value="金色"></li>
+                                            <li class="flostl dGary" name="color" value="灰色"></li>
+                                            <li class="flostl black" name="color" value="黑色"></li>
+                                            <li class="flostl blue" name="color" value="蓝色"></li>
+                                            <li class="flostl green" name="color" value="绿色"></li>
+                                            <li class="flostl yellow" name="color" value="黄色"></li>
+                                            <li class="flostl red" name="color" value="粉色"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <div style="float:right;right:33px;"> </div>
+                                <div class="closedbuttom" style="text-align :right;">
+                                    <a onclick="closeSelDiv()" class="btn btn-default btn-02" style="width: 31%; height: 22%; background: #F08300;margin-right:11px; color: #fff;">完成</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="products">
+            @*@Html.Partial("SearchList", Model)*@
+            @*@Html.Action("SearchList")*@
+            @*<script type="text/javascript">
+                    $("#products").load("/Home/SearchList", {
+                        key: $("#key").val(),
+                        price: $("#price").val(),
+                        jb: $("#jb").val(),
+                        phonemodelid: $("#phonemodelid").val(),
+                        color: $("#color").val(),
+                    });
+                </script>*@
+            @Html.Action("SearchList", new { phonemodelid = phonemodelid })
+        </div>
+        <!--分页-->
+        <div id="loadingDiv" class="loading" style="display:none;text-align:center;">
+            <img src="/images/loading.gif"><span>正在加载...</span>
+        </div>
+        @*<div class="col-md-12"> </div>*@
+    </div>
+}
+<!-- /top-link-block -->
+<div id="top-link-block" class="hidden">
+    <a href="/Home/Index" target="_self">
+        <span class="submit-1">
+            <img src="/images/home_3.png" class="img-responsive" alt="Responsive image" />首页<br>
+        </span>
+    </a>
+    <a href="#top" onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+        <span class="submit-2">
+            <img src="/images/top_arrow.png" class="img-responsive" alt="Responsive image" />顶部 <br>
+        </span>
+    </a>
+</div>
+<!-- /top-link-block -->
+<style>
+    div.hidden {
+        display: none;
+    }
+
+    .submit-1, .submit-2 {
+        text-align: center;
+        background-color: black;
+    }
+
+        .submit-1 img {
+            margin: 0px 0px 0px 8px;
+        }
+</style>
+<script type="text/javascript">
+    $(function () {
+        //当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 100) {
+                $("#top-link-block").removeClass("hidden").fadeIn(1500);
+            }
+            else {
+                $("#top-link-block").addClass("hidden").fadeOut(1500);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+@using _1Fix.Entity
+@model SellBaseInfo
+<script type="text/javascript">
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal2').modal('hide');
+            window.location.href = "/Consignment/SellBaseInfo";
+        }
+    }
+</script>
+@using (Ajax.BeginForm("SaveAudit", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "auditUserForm" }))
+{
+    <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+        <h4 class="modal-title">审核</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">手机型号： <span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        @Model.PhoneModel
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">IMEI： <span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        @Model.Sn
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注： <span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <textarea required="" name="remark" placeholder="审核备注..." class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">审核： <span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <div class="rdio rdio-primary">
+                            <input type="radio" name="status" value="1" id="audit1" checked="checked">
+                            <label for="audit1">审核通过</label>
+                        </div>
+                        <div class="rdio rdio-primary">
+                            <input type="radio" name="status" id="audit2" value="2">
+                            <label for="audit2">审核不通过</label>
+                        </div>
+                        <div class="rdio rdio-primary">
+                            <input type="radio" name="status" id="audit3" value="0">
+                            <label for="audit3">未审核</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="id" value="@Model.ID" />
+        <input type="hidden" name="sn" value="@Model.Sn" />
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </div>
+}

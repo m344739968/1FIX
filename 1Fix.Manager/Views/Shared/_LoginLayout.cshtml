@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>万修科技 - 万修管理系统</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-override.css" rel="stylesheet" />
+    <link href="~/css/weather-icons.min.css" rel="stylesheet" />
+    <link href="~/css/jquery-ui-1.10.3.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/animate.min.css" rel="stylesheet" />
+    <link href="~/css/animate.delay.css" rel="stylesheet" />
+    <link href="~/css/toggles.css" rel="stylesheet" />
+    <link href="~/css/select2.css" rel="stylesheet" />
+    <link href="~/css/lato.css" rel="stylesheet" />
+    <link href="~/css/roboto.css" rel="stylesheet" />
+    <link href="~/css/style.default.css" rel="stylesheet">
+
+    <script src="~/js/jquery-1.11.1.min.js"></script>
+    <script src="~/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/modernizr.min.js"></script>
+    <script src="~/js/jquery.sparkline.min.js"></script>
+    <script src="~/js/jquery.cookies.js"></script>
+    <script src="~/js/toggles.min.js"></script>
+    <script src="~/js/retina.min.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/custom.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="signin">
+    <section>
+        @RenderBody()
+    </section>
+    <script>
+        jQuery(document).ready(function () {
+
+            jQuery(".select2").select2({
+                width: '100%',
+                minimumResultsForSearch: -1
+            });
+
+            jQuery(".select2-2").select2({
+                width: '100%'
+            });
+
+            // Please do not use the code below
+            // This is for demo purposes only
+            var c = jQuery.cookie('change-skin');
+            if (c && c == 'greyjoy') {
+                jQuery('.btn-success').addClass('btn-orange').removeClass('btn-success');
+            } else if (c && c == 'dodgerblue') {
+                jQuery('.btn-success').addClass('btn-primary').removeClass('btn-success');
+            } else if (c && c == 'katniss') {
+                jQuery('.btn-success').addClass('btn-primary').removeClass('btn-success');
+            }
+        });
+    </script>
+
+</body>
+</html>
+

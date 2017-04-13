@@ -1,0 +1,129 @@
+﻿@{
+    Layout = null;
+
+}
+@using _1Fix.Common
+@using _1Fix.Entity.Model
+@model CuSellPhone
+<script type="text/javascript">
+    function success(data) {
+        if (data.status == 1) {
+            alert("保存成功");
+            $('#myModal1').modal('hide');
+        } else if (data.status == -1) {
+            alert("已经被下单或者付款，不能再修改价格");
+        } else {
+            alert("保存失败");
+        }
+    }
+</script>
+@using (Ajax.BeginForm("SavePrice", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editPriceForm" }))
+{
+    <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+        <h4 class="modal-title">修改价格</h4>
+    </div>
+    <div class="modal-body">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">小标题：<span class="asterisk"></span></label>
+                <div class="col-sm-7">
+                    <input type="text" required="" value="@(Model.SellPhone.Title == null ? "" : Model.SellPhone.Title)" class="form-control" placeholder="小标题" name="Title">
+                </div>
+            </div>
+            @if (WeiXinLoginUserManager.CurrLoginUser.VipGroup == "1")
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">个人用户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="form-control" placeholder="个人用户价格" name="PersonPrice">
+                    </div>
+                </div>
+            }
+            @if (WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">个人用户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="form-control" placeholder="个人用户价格" name="PersonPrice">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">企业用户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.EnterprisePrice==null ? 0 : Model.SellPhone.EnterprisePrice)" class="form-control" placeholder="企业用户价格" name="EnterprisePrice">
+                    </div>
+                </div>
+            }
+            @if (WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">个人用户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="form-control" placeholder="个人用户价格" name="PersonPrice">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">企业用户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.EnterprisePrice==null ? 0 : Model.SellPhone.EnterprisePrice)" class="form-control" placeholder="企业用户价格" name="EnterprisePrice">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label class="col-sm-3 control-label">大客户价格：<span class="asterisk"></span></label>
+                    <div class="col-sm-7">
+                        <input type="text" required="" value="@(Model.SellPhone.BigCustomerPrice == null ? 0 : Model.SellPhone.BigCustomerPrice)" class="form-control" placeholder="大客户价格" name="BigCustomerPrice">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="id" value="@Model.SellBaseInfo.ID" />
+        <input type="hidden" name="Sn" value="@Model.SellBaseInfo.Sn" />
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary" style="margin: auto; background-color: #f08300; border-color: #f08300;">保存</button>
+    </div>
+}
+<script type="text/javascript">
+    jQuery("#editPriceForm").validate({
+        rules: {
+            Title: {
+                required: true
+            },
+            PersonPrice: {
+                required: true,
+                number: true
+            },
+            EnterprisePrice: {
+                required: true,
+                number: true
+            },
+            BigCustomerPrice: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            Title: {
+                required: "请输入小标题"
+            },
+            PersonPrice: {
+                required: "请输入个人用户价格",
+                number: "请输入数字类型"
+            },
+            EnterprisePrice: {
+                required: "请输入企业用户价格",
+                number: "请输入数字类型"
+            },
+            BigCustomerPrice: {
+                required: "请输入大客户价格",
+                number: "请输入数字类型"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+</script>

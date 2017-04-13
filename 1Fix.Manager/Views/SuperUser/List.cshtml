@@ -1,0 +1,128 @@
+﻿@{
+    Layout = null;
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity
+@model PagedList<SuperUser>
+@{ int i = 1;}
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            @*<th>#</th>*@
+            <th>ID</th>
+            <th>账号</th>
+            <th>密码</th>
+            <th>昵称</th>
+            <th>手机号</th>
+            <th>城市</th>
+            <th>状态</th>
+            <th>编辑</th>
+            <th>权限</th>
+            <th>删除</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.id</td>
+                <td>@item.username</td>
+                <td>@item.password</td>
+                <td>@item.NickName</td>
+                <td>@item.Phone</td>
+                <td>@item.City</td>
+                <td>@(item.active == true ? "启用" : "禁用")</td>
+                <td class="table-success">
+                    <a href="#" onclick="showModal1(@item.id)" data-toggle="modal"><i class="fa fa-pencil"></i></a>
+                    @*<a class="delete-row" href=""><i class="fa fa-trash-o"></i></a>*@
+                </td>
+                <td>
+                    <a href="#" onclick="showModal2(@item.id)" data-toggle="modal"><i class="fa fa-pencil"></i></a>
+                </td>
+                <td>
+                    <a href="#" onclick="del(@item.id)" data-toggle="modal"><i class="fa fa-minus-circle"></i></a>
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-6">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(id) {
+        $("#myModal1").modal({
+            remote: "/SuperUser/Edit?ID=" + id
+        });
+    }
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal2").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //编辑管理员权限
+    function showModal2(id) {
+        $("#myModal2").modal({
+            remote: "/SuperUser/Role?ID=" + id
+        });
+    }
+    //删除
+    function del(id)
+    {
+        if(confirm("确定删除吗"))
+        {
+            $.ajax({
+                type: "post",
+                url: "/SuperUser/Delete",
+                data: {id:id},
+                success: function (data) {
+                    if(data.status>0){
+                        alert("删除成功");
+                        window.location.href="/SuperUser/Index";
+                    }else
+                    {
+                        alert("删除失败");
+                    }
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,29 @@
+﻿@using _1Fix.Entity
+@model UserAddress
+@{
+    ViewBag.Title = "DefaultAddress";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+    var sn = Request["sn"];
+}
+<div class="row">
+    <div class="col-xs-12 col-xs-12background">
+        <div class="col-xs-4">
+            <p class="addresstext1"> <img src="/images/adddress_user.png" /> @Model.user_name</p>
+        </div>
+        <div class="col-xs-6">
+            <p class="addresstext2"> <img src="/images/address_phone.png" /> @Model.user_phone </p>
+            <br>
+        </div>
+        <div class="col-xs-1  "> <a href="javascript:editAddress(@Model.UserInfoID);"> <img src="/images/right_arrow-2.png" style="padding-top:49px;" /> </a><span class="col-md-1-1 imgright"></span> </div>
+        <div class="col-xs-12 col-xs-12address">
+            <p class="addresstext">@(Model.province)@(Model.city)@(Model.area)@(Model.user_address) </p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //新增地址
+    function editAddress(userinfoid) {
+        //$("#addressArea").load("/Home/EditAddress", { userinfoid: userinfoid });
+        location.href = "/Home/EditAddress?sn=" +@sn +"&userinfoid=" + userinfoid;
+    };
+</script>

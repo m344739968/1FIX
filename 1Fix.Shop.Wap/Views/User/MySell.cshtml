@@ -1,0 +1,103 @@
+﻿@using _1Fix.Entity.Model
+@using Webdiyer.WebControls.Mvc
+@model PagedList<CuSellBaseInfo>
+@{
+    ViewBag.Title = "MySell";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container ">
+    <!--nav -->
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="#"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我的寄售</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-xs-6 col-md-8"><img src="/images/iphone4.png" /> </div>
+                <div class="col-xs-6 col-md-4 phonetext1">
+                    <p class="phonetext">@(item.SellBaseInfo.PhoneModel)</p>
+                    <p class="phonetext"> IMEI:@(item.SellBaseInfo.Sn) </p>
+                    <p class="phonetext"> 联系电话：@(item.SellBaseInfo.ContactPhone) </p>
+                    <p class="phonetext"> 快递单号:@(item.SellBaseInfo.CourierNo) </p>
+                    <p class="phonetext"> 寄售时间:@(item.SellBaseInfo.AddDate) </p>
+                    <p class="phonetext">
+                        审核状态:
+                        @if (item.SellBaseInfo.Status == 0)
+                        {
+                            <span class="phonetext2">未审核</span>
+                        }
+                        else if (item.SellBaseInfo.Status == 1)
+                        {
+                            <span class="phonetext2">审核通过</span>
+                        }
+                        else
+                        {
+                            <span class="phonetext2">审核未通过</span>
+                        }
+                    </p>
+                    <p class="phonetext"> 相关操作:<span class="phonetext2"><a href="#" onclick="updatePrice(@item.SellBaseInfo.Status,'@item.SellBaseInfo.ID')">修改价格</a> </span></p>
+                    <p class="phonetext"> 相关操作:<span class="phonetext2"><a href="#" onclick="updown(0,@item.SellBaseInfo.Status,@item.SellBaseInfo.ID)">上架</a> </span></p>
+                    <p class="phonetext"> 相关操作:<span class="phonetext2"><a href="#" onclick="updown(5,@item.SellBaseInfo.Status,@item.SellBaseInfo.ID)">下架</a> </span></p>
+                </div>
+            </div>
+            <!-- line -->
+            <div class="row">
+                <div class="line"> </div>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    //修改价格
+    function updatePrice(status, id) {
+        if (status == 1) {
+            location.href = "/User/Price?id=" + id
+        } else if (status == 2) {
+            alert("未通过审核，不能修改价格");
+        } else {
+            alert("未审核状态，不能修改价格");
+        }
+    }
+    //上下架操作
+    function updown(status, auditStatus, id) {
+        var s = "";
+        if (auditStatus == 1) {
+            if (status == 0) {
+                s = "上架";
+            } else if (status == 5) {
+                s = "下架";
+            }
+            $.ajax({
+                type: "post",
+                url: "/User/Updown",
+                data: { id: id, status: status },
+                success: function (data) {
+                    if (data.status > 0) {
+                        alert(s + "操作成功");
+                    } else if (data.status == -1) {
+                        alert("只有未上架状态，才可以上架，不可以重复操作");
+                    }
+                    else if (data.status == -2) {
+                        alert("只有上架状态，才可以下架，不可以重复操作");
+                    } else {
+                        alert(s + "操作失败");
+                    }
+                }
+            });
+        } else {
+            alert("没有审核通过，不能上、下架");
+        }
+    }
+</script>

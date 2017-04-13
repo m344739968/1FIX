@@ -1,0 +1,134 @@
+﻿@{
+    Layout = null;
+}
+@using _1Fix.Entity.Model
+@model CuSellPhone
+<script type="text/javascript">
+    var status = "@Model.SellPhone.Status";
+    $(function () {
+        $("input[name='status']").attr("checked", false);
+        $("input[name='status']").each(function (i, item) {
+            if ($(this).val() == status) {
+                $(this).attr("checked", true);
+            }
+        });
+    })
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal3').modal('hide');
+            window.location.href = "/Consignment/Index";
+        }
+    }
+</script>
+@using (Ajax.BeginForm("SaveUpDown", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "UpDownForm" }))
+{
+    <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+        <h4 class="modal-title">上架/下架</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                @if (Model == null)
+                {
+                    <div>暂无数据</div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">手机型号：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            @Model.CheckFacility.phonename
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">IMEI：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            @Model.CheckFacility.sn
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label class="col-sm-3 control-label">个人用户价格：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            <input type="text" required="" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="form-control" placeholder="个人用户价格" name="PersonPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">企业用户价格：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            <input type="text" required="" value="@(Model.SellPhone.EnterprisePrice==null ? 0 : Model.SellPhone.EnterprisePrice)" class="form-control" placeholder="企业用户价格" name="EnterprisePrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">大客户价格：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            <input type="text" required="" value="@(Model.SellPhone.BigCustomerPrice == null ? 0 : Model.SellPhone.BigCustomerPrice)" class="form-control" placeholder="大客户价格" name="BigCustomerPrice">
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">上架/下架：<span class="asterisk"></span></label>
+                        <div class="col-sm-9">
+                            <div class="rdio rdio-primary">
+                                <input type="radio" name="status" value="0" id="audit1" checked="checked">
+                                <label for="audit1">上架</label>
+                            </div>
+                            <div class="rdio rdio-primary">
+                                <input type="radio" name="status" id="audit2" value="5">
+                                <label for="audit2">下架</label>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="sn" value="@Model.CheckFacility.sn" />
+                }
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </div>
+}
+<script type="text/javascript">
+    jQuery("#auditUserForm").validate({
+        rules: {
+            PersonPrice: {
+                required: true,
+                number: true
+            },
+            EnterprisePrice: {
+                required: true,
+                number: true
+            },
+            BigCustomerPrice: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            //PersonPrice: "请输入个人用户价格",
+            //EnterprisePrice: "请输入企业用户价格",
+            //BigCustomerPrice: "请输入大客户价格"
+            PersonPrice: {
+                required: "请输入个人用户价格",
+                number: "请输入数字类型"
+            },
+            EnterprisePrice: {
+                required: "请输入企业用户价格",
+                number: "请输入数字类型"
+            },
+            BigCustomerPrice: {
+                required: "请输入大客户价格",
+                number: "请输入数字类型"
+            }
+        },
+        highlight: function (element) {
+            jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        success: function (element) {
+            jQuery(element).closest('.form-group').removeClass('has-error');
+        }
+    });
+</script>

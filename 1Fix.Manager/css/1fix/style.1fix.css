@@ -1,0 +1,90 @@
+﻿body {
+}
+
+/*************************************************   分页样式*/
+div.paging {
+    text-align: center;
+    float:right;
+}
+
+    div.paging span.current, div.paging a {
+        background: #fff none repeat scroll 0 0;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        color: #636e7b;
+        cursor: pointer;
+        display: inline-block;
+        float: left;
+        line-height: 21px;
+        margin-right: 5px;
+        padding: 6px 12px;
+        position: relative;
+        text-decoration: none;
+    }
+
+    div.paging span.current {
+        background-color: #1caf9a;
+        border-color: #1caf9a;
+        color: #fff;
+        text-decoration: none;
+    }
+span.total {
+padding:6px 12px;
+}
+/*************************************************   分页样式
+
+/*************************************************手机检测图标*/
+        .icon-c0 {
+        color: #009b4c;
+    }
+
+    .icon-c1 {
+        color: #fdd100;
+    }
+
+    .icon-c2 {
+        color: #f08519;
+    }
+
+    .icon-c3 {
+        color: #e62129;
+    }
+
+    .icon-right {
+        float: right;
+        margin-right: 20px;
+    }
+/*************************************************手机检测图标*/
+
+/*************************************************关闭按钮图标*/
+.close {
+    opacity: 0.8;
+}
+/*************************************************关闭按钮图标*/
+
+/*************************************************上传图片*/
+.file-image {
+    float:left;
+
+}
+.file-image li {
+    float:left;
+    margin-right:20px;
+    list-style:none;
+}
+.file-image li img {
+    /*width:70px;*/
+    height:200px;
+}
+.tp-icon .img-close {
+    right: 20px;
+    top: 50px;
+    cursor:pointer;
+}
+.img-success {
+color:green;
+position:absolute;
+right:20px;
+top:250px;
+}
+/*************************************************上传图片*/

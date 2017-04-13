@@ -1,0 +1,62 @@
+﻿@using _1Fix.Entity
+@model List<UserAddress>
+@{
+    ViewBag.Title = "EditAddress";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var sn = Request["sn"];
+}
+<div class="container">
+    <!--nav -->
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="javascript:;"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">收货地址</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant" id="divAddress">
+        @foreach (UserAddress item in Model)
+        {
+            <div class="commoditylist commoditylist1">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <div class="col-xs-3">
+                            <p class="addresstext1"> @item.user_name</p>
+                        </div>
+                        <div class="col-xs-4">
+                            <p class="addresstext2"> @item.user_phone </p>
+                            <br>
+                        </div>
+                        <div class="col-xs-9 col-xs-12address">
+                            <p class="addresstext">@(item.province)@(item.city)@(item.area)@(item.user_address) </p>
+                        </div>
+                        <div class="col-sm-1 col-sm-1images">
+                            <img src="/images/address-01.png" onclick="editAddress(@item.ID)" class="img-responsive" alt="Responsive image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-xs-12 col-md-61">
+            <button type="button" onclick="addAddress()" class="btn btn-default navbar-btn navbar-btn1">新增地址</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var sn = "@sn";
+    //新增地址
+    function addAddress() {
+        $("#divAddress").load("/Home/NewAddress", { id: 0, sn: sn });
+    };
+    //编辑地址
+    function editAddress(id) {
+        $("#divAddress").load("/Home/NewAddress", { id: id, sn: sn });
+    };
+</script>

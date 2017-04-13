@@ -1,0 +1,171 @@
+﻿body {
+}
+/*微信登陆 start*/
+.mask-g {
+    background-color: #f0ba7c;
+    position: fixed;
+    z-index: 25;
+    height: 100%;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+}
+
+.WeChat-login {
+    width: 300px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 25;
+    margin-top: -200px;
+    margin-left: -150px;
+    height: 400px;
+}
+
+    .WeChat-login span {
+    }
+
+        .WeChat-login span img {
+        }
+
+    .WeChat-login b {
+        font-size: 14px;
+        line-height: 1.75;
+        color: #FFF;
+        text-align: center;
+        display: block;
+    }
+/*微信登陆 end*/
+/*账号登录 start*/
+.signinSuccess {
+    color: green;
+}
+
+.signinFail {
+    color: red;
+}
+/*账号登录 end*/
+/*分页样式 start*/
+.paging {
+    margin: 10px auto 10px 80px;
+    text-align: center;
+    /*width: 980px;*/
+}
+
+div.paging span.current, div.paging a {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    color: #636e7b;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    line-height: 21px;
+    margin-right: 5px;
+    padding: 6px 8px;
+    position: relative;
+    text-decoration: none;
+}
+
+div.paging span.current {
+    background-color: #f08300;
+    border-color: #f08300;
+    color: #fff;
+    text-decoration: none;
+}
+/*分页样式 end*/
+/*按钮覆写 start*/
+.modal-footer .btn {
+    margin: auto;
+    /*background-color: #f08300;
+    border-color: #f08300;*/
+    text-decoration: none;
+}
+
+    .modal-footer .btn:hover {
+        margin: auto;
+        /*background-color: #f08300;
+        border-color: #f08300;*/
+        text-decoration: none;
+    }
+/*按钮覆写 end*/
+/*验证提示*/
+label.error {
+    color: #ff0000;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 25px;
+    padding-left: 5px;
+}
+/* Styles for Ajax helpers
+-----------------------------------------------------------*/
+#AjaxTiper {
+    width: 200px;
+    top: 50%;
+    left: 50%;
+    margin-left: -100px;
+    display: none;
+    text-align: center;
+    z-index: 9999;
+    position: absolute;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 10px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.well {
+    min-height: 15px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+    .well blockquote {
+        border-color: #ddd;
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+
+.well-large {
+    padding: 24px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.well-small {
+    padding: 9px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.well img {
+    width: auto\9;
+    height: auto;
+    max-width: 100% !important;
+    vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+.coupons {
+    margin: 10px 10px -15px 40px;
+}
+
+.coupons-checkbox {
+    margin-right: 5px;
+}
+
+.coupons-text {
+}

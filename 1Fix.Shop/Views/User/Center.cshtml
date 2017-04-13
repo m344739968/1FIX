@@ -1,0 +1,50 @@
+﻿@using _1Fix.Entity.Model
+@using Webdiyer.WebControls.Mvc
+@{
+    ViewBag.Title = "Center";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    PagedList<CuSellPhoneOrder> MyOrderList = ViewBag.MyOrderList as PagedList<CuSellPhoneOrder>;
+    PagedList<CuSellBaseInfo> MySellBaseInfoList = ViewBag.MySellBaseInfoList as PagedList<CuSellBaseInfo>;
+}
+<style type="text/css">
+    .paging {
+        margin: 10px auto 10px 200px;
+    }
+</style>
+<div class="tabmain01">
+    <div class="tabbox">
+        <div class="tab">
+            <ul>
+                <li id="tow1" class="on" onclick='setTab("tow",1,2)'>我的购买</li>
+                <li id="tow2" onclick='setTab("tow",2,2)'>我的寄售 </li>
+            </ul>
+            <div class="title cf"></div>
+        </div>
+        <div class="tabList">
+            <div id="cont_tow_1" class="one block">
+                <div class="order11" id="divMyOrderList">
+                    @Html.Partial("MyOrderList", MyOrderList)
+                    @*@Html.Action("AjaxPagers", new { target = "MyOrderList" })*@
+                </div>
+            </div>
+            <div id="cont_tow_2" class="one">
+                <div class="consignment07" id="divMySellPhoneList">
+                    @Html.Partial("MySellList", MySellBaseInfoList)
+                    @*@Html.Action("AjaxPagers", new { target = "MySellList" })*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="page01"> </div>
+<script type="text/javascript">
+    function setTab(name, m, n) {
+        for (var i = 1; i <= n; i++) {
+            var menu = document.getElementById(name + i);
+            var showDiv = document.getElementById("cont_" + name + "_" + i);
+            menu.className = i == m ? "on" : "";
+            showDiv.style.display = i == m ? "block" : "none";
+        }
+    }
+</script>
+@{Html.RegisterMvcPagerScriptResource();}

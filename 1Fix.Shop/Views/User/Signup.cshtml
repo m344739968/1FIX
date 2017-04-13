@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "注册";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">注册用户</h4>
+</div>
+@using (Ajax.BeginForm("SaveSignup", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successSignup" }, new { id = "signupForm" }))
+{
+    <div class="modal-body">
+        <div class="col-xs-12">
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">账号：<span class="asterisk"></span></label>
+                <div class="col-sm-8">
+                    <input type="text" required="" class="form-control" placeholder="账号" name="username" id="username">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">昵称：<span class="asterisk"></span></label>
+                <div class="col-sm-8">
+                    <input type="text" required="" class="form-control" placeholder="昵称" name="nickname" id="nickname">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">密码：<span class="asterisk"></span></label>
+                <div class="col-sm-8">
+                    <input type="password" required="" class="form-control" placeholder="密码" name="password" id="password">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">确认密码：<span class="asterisk"></span></label>
+                <div class="col-sm-8">
+                    <input type="password" required="" class="form-control" placeholder="确认密码" name="confirmpassword">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-2 control-label">验证码：<span class="asterisk"></span></label>
+                <div class="col-sm-4">
+                    <input type="text" required="" class="form-control" placeholder="验证码" name="validcode">
+                </div>
+                <div class="col-sm-4">
+                    <img id="ImgCheckCode2" src="/User/GetSignupCheckCode" onclick="refreshCheckCode2()" width="98" height="25" title="Click the refresh." alt="Click the refresh." style="margin: 5px 30px; " />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary" style="margin: auto; background-color: #f08300; border-color: #f08300;">注册</button>
+    </div>
+}
+
+<script type="text/javascript">
+    //刷新验证码
+    function refreshCheckCode2() {
+        $("#ImgCheckCode2").attr("src", "/User/GetSignupCheckCode?rand=" + Math.random());
+    }
+    //注册回调函数
+    function successSignup(data) {
+        if (data.status > 0) {
+            alert("注册成功");
+            $('#singnup-modal').modal('hide');
+        } else if (data.status == -1) {
+            alert("验证码不正确");
+        } else if (data.status == -2) {
+            alert("该账号已被注册,请重新输入账号");
+        } else {
+            alert("注册失败");
+        }
+    }
+    jQuery("#signupForm").validate({
+        rules: {
+            username: {
+                required: true,
+                remote: {
+                    type: "post",
+                    url: "/User/ValidUserName",
+                    data: {
+                        username: function () {
+                            return $("#username").val();
+                        }
+                    },
+                    dataType: "html",
+                    dataFilter: function (data, type) {
+                        //alert(data);
+                        if (data == "0")
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+            },
+            nickname: {
+                required: true
+            },
+            password: {
+                required: true
+            },
+            confirmpassword: {
+                required: true,
+                equalTo: '#password'
+            },
+            validcode: {
+                required: true
+            }
+        },
+        messages: {
+            username: {
+                required: "请输入账号",
+                remote: "账号已被注册"
+            },
+            nickname: {
+                required: "请输入昵称"
+            },
+            password: {
+                required: "请输入密码"
+            },
+            confirmpassword: {
+                required: "请输入确认密码",
+                equalTo: "两次输入密码不一致"
+            },
+            validcode: {
+                required: "请输入验证码"
+            }
+        }, errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+</script>

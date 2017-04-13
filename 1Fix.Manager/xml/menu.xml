@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu>
+  <group id="1" text="用户管理" icon="fa fa-user" url="/User/Index"></group>
+  <group id="2" text="寄卖管理" icon="fa fa-suitcase" url="#">
+    <item id="101" text="审核寄卖信息" icon="fa fa-caret-right" url="/Consignment/SellBaseInfo"></item>
+    <item id="102" text="寄卖手机信息" icon="fa fa-caret-right" url="/Consignment/Index"></item>
+  </group>
+  <group id="3" text="订单管理" icon="glyphicon glyphicon-lock" url="/Order/Index"></group>
+  <group id="4" text="二手机价格表管理" icon="fa fa-mobile" url="/MicroMessage/Index"></group>
+  <group id="5" text="全新机价格表管理" icon="fa fa-mobile-phone" url="/MicroMessageNewPhone/Index"></group>
+  <group id="6" text="管理员管理" icon="fa fa-users" url="/SuperUser/Index"></group>
+  <group id="7" text="手机检测中心" icon="fa fa-mobile-phone" url="/CheckFacility/Index"></group>
+</menu>

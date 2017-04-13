@@ -1,0 +1,168 @@
+﻿@{
+    Layout = null;
+}
+@using _1Fix.Entity
+@model MicroMessage_NewPhone_Money
+<script type="text/javascript">
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal1').modal('hide');
+            window.location.href = "/MicroMessageNewPhone/Index";
+        }
+    }
+</script>
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">全新机价格表编辑</h4>
+</div>
+@using (Ajax.BeginForm("SaveMicroMessageNewPhone", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editMicroMessageNewPhoneForm" }))
+{
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">手机型号：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model==null?"":Model.PhoneName)" class="form-control" placeholder="手机型号" name="PhoneName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">灰色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.Grey.ToString())" class="form-control" placeholder="灰色机报价" name="Grey">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">白色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.White.ToString())" class="form-control" placeholder="白色机报价" name="White">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">金色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.Gold.ToString())" class="form-control" placeholder="金色机报价" name="Gold">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">后封灰色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.SGrey.ToString())" class="form-control" placeholder="后封灰色机报价" name="SGrey">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">后封白色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.SWhite.ToString())" class="form-control" placeholder="后封白色机报价" name="SWhite">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">后封金色机报价：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.SGold.ToString())" class="form-control" placeholder="后封金色机报价" name="SGold">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">渠道版本：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.release)" class="form-control" placeholder="渠道版本" name="release">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">排序：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        <input type="text" required="" value="@(Model == null ? "" : Model.OrderID.ToString())" class="form-control" placeholder="排序" name="OrderID">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="ID" value="@(Model==null?0:Model.ID)" />
+        <button data-dismiss="modal" class="btn btn-default" id="btnClose" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </div>
+}
+<script type="text/javascript">
+    jQuery("#editMicroMessageNewPhoneForm").validate({
+        rules: {
+            PhoneName: {
+                required: true
+            },
+            Grey: {
+                required: true,
+                digits: true
+            },
+            White: {
+                required: true,
+                digits: true
+            },
+            Gold: {
+                required: true,
+                digits: true
+            },
+            SGrey: {
+                required: true,
+                digits: true
+            },
+            SWhite: {
+                required: true,
+                digits: true
+            },
+            SGold: {
+                required: true,
+                digits: true
+            },
+            release: {
+                required: true
+            },
+            OrderID: {
+                required: true,
+                digits: true
+            }
+        },
+        messages: {
+            PhoneName: {
+                required: "请输入手机型号"
+            },
+            Grey: {
+                required: "请输入灰色机报价",
+                digits: "请输入数字类型"
+            },
+            White: {
+                required: "请输入白色机报价",
+                digits: "请输入数字类型"
+            },
+            Gold: {
+                required: "请输入金色机报价",
+                digits: "请输入数字类型"
+            },
+            SGrey: {
+                required: "请输入后封灰色机报价",
+                digits: "请输入数字类型"
+            },
+            SWhite: {
+                required: "请输入后封白色机报价",
+                digits: "请输入数字类型"
+            },
+            SGold: {
+                required: "请输入后封金色机报价",
+                digits: "请输入数字类型"
+            },
+            release: {
+                required: "请输入渠道版本"
+            },
+            OrderID: {
+                required: "请输入排序",
+                digits: "请输入数字类型"
+            }
+        },
+        highlight: function (element) {
+            jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        success: function (element) {
+            jQuery(element).closest('.form-group').removeClass('has-error');
+        }
+    });
+</script>

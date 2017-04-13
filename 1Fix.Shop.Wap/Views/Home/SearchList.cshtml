@@ -1,0 +1,98 @@
+﻿@using _1Fix.Utility
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhone>
+@{
+    ViewBag.Title = "SearchList";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+}
+@foreach (var item in Model)
+{
+    <div class="col-md-12">
+        <div class="row" onclick="goDetail('@item.CheckFacility.sn')">
+            <div class="col-md-1"> </div>
+            <div class="row-1">
+                <div class="col-xs-5 col-md-6 col-md-6-1">
+                    <span class="product-01">
+                        <a href="javascript:;">
+                            <img src="/Images/new_iphone/@(item.CheckFacility.phonename)_@(ImageHelper.GetImageColor(item.CheckFacility.color)).png" class="img-responsive product-01" alt="Responsive image" />
+                            @*<img src="/images/new_iphone/iphone 4_.png" class="img-responsive product-01" alt="Responsive image" />*@
+                        </a>
+                    </span>
+                </div>
+                <div class="col-xs-7 col-md-6 product-03">
+                    <h4 class="font-size-1">@(item.CheckFacility.phonename)</h4>
+                    <h5 class="fontsize-1">@(item.CheckFacility.size) @(item.CheckFacility.color) @(item.CheckFacility.nettype)</h5>
+                    @if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser == null)
+                    {
+                    <span class="pricefont">￥@(item.SellPhone.PersonPrice)</span>
+                    }
+                    else
+                    {
+                        if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "3")
+                        {
+                    <span class="pricefont">￥@(item.SellPhone.BigCustomerPrice)</span>
+                        }
+                        else if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "2")
+                        {
+                    <span class="pricefont">￥@(item.SellPhone.EnterprisePrice)</span>
+                        }
+                        else
+                        {
+                    <span class="pricefont">￥@(item.SellPhone.PersonPrice)</span>
+                        }
+                    }
+                    <div style="width:175px;"></div>
+                    <div class="pricefont-1">@(item.SellPhone.ClickNum == null ? 0 : item.SellPhone.ClickNum)人感兴趣</div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    var totalPage = "@Model.TotalPageCount";
+    var currentPage = "@Model.CurrentPageIndex";  //Infinate Scroll starts from second block
+    var inProgress = false;
+    $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() -
+        $(window).height() && !inProgress) {
+            inProgress = true;
+            currentPage = parseInt(currentPage) + 1;
+            if (parseInt(currentPage) > parseInt(totalPage)) {
+                //alert('分页完了');
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "/Home/SearchList?page=" + currentPage,
+                    data: {
+                        key: $("#key").val(),
+                        price: $("#price").val(),
+                        jb: $("#jb").val(),
+                        phonemodelid: $("#phonemodelid").val(),
+                        color: $("#color").val(),
+                    },
+                    beforeSend: function () {
+                        $("#loadingDiv").show();
+                    },
+                    error: function () {
+                        $("#loadingDiv").hide();
+                    },
+                    complete: function () {
+                        $("#loadingDiv").hide();
+                    },
+                    success: function (data) {
+                        $("#products").append(data);
+                        $("#loadingDiv").hide();
+                        inProgress = false;
+
+                    }
+                });
+            }
+        }
+    });
+    //查看详细
+    function goDetail(sn) {
+        window.location.href = "/Home/Detail?sn=" + sn;
+    }
+</script>
+<!--分页-->

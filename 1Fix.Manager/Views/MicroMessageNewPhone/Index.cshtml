@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity
+@model PagedList<MicroMessage_NewPhone_Money>
+<div class="pageheader">
+    <h2><i class="fa fa-user"></i> 全新机价格表管理 <span>Subtitle goes here...</span></h2>
+    <div class="breadcrumb-wrapper">
+        <span class="label">您的位置:</span>
+        <ol class="breadcrumb">
+            <li><a href="/Home/Index">首页</a></li>
+            <li class="active">用户查询</li>
+        </ol>
+    </div>
+</div>
+<div class="contentpanel">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-btns">
+                        @*<a class="panel-close" href="">×</a>*@
+                        <a class="minimize" href="">−</a>
+                    </div>
+                    <h4 class="panel-title">高级查询</h4>
+                    @*<p>This is an example of a form using a placeholder instead of label.</p>*@
+                </div>
+                @using (Ajax.BeginForm("Index", "", new AjaxOptions { HttpMethod = "Get", UpdateTargetId = "divList" }, new { id = "divForm" }))
+                {
+                    <div class="panel-body">
+                        <div class="row row-pad-5">
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" placeholder="手机型号" name="phonename">
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-primary" id="btnSearch">搜索</button>
+                                <button type="button" class="btn btn-primary" onclick="showModal1(0)" id="btnAdd">新增</button>
+                            </div>
+                            <div class="col-xs-4">
+
+                            </div>
+                        </div><!-- row -->
+                    </div><!-- panel-body -->
+                    <div class="panel-footer">
+                        @*<button type="submit" class="btn btn-primary">搜索</button>*@
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="divList" class="table-responsive">
+                @Html.Partial("List", Model)
+            </div><!-- table-responsive -->
+        </div>
+    </div>
+</div>
+@{Html.RegisterMvcPagerScriptResource();}

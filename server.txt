@@ -1,0 +1,22 @@
+服务器ftp:
+www.1fix.cn
+shop1fix
+w725M47s
+
+
+服务器sql server:
+www.1fix.cn,333
+selluser
+1q2w3e4r5t
+
+
+服务器svn
+https://wanxiu.jios.org/svn/Web/
+malei
+1q2w3e4r5t
+
+域名：
+jy.1fix.cn
+jyadmin.1fix.cn
+
+

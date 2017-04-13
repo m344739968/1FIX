@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal2').modal('hide');
+            window.location.href = "/Order/Index";
+        }
+    }
+</script>
+@using (Ajax.BeginForm("SaveOrderSend", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editUserForm" }))
+{
+    <div class="modal-header">
+        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+        <h4 class="modal-title">发货</h4>
+    </div>
+    <div class="modal-body">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">发货人：<span class="asterisk"></span></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="发货人" name="sendperson">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;">
+                <label class="col-sm-3 control-label">快递单号：<span class="asterisk"></span></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" placeholder="快递单号" name="sendcourierno">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="OrderNo" value="@ViewBag.OrderNo" />
+        <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </div>
+}

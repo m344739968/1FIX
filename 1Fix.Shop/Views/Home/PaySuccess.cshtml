@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "PaySuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var status = Request["status"];
+    var orderno = Request["orderno"];
+    var orderprice = Request["orderprice"];
+    string date = "";
+    if (Session["1FixPaySuccessTemp"] != null)
+    {
+        date = Session["1FixPaySuccessTemp"] as String;
+    }
+}
+<script type="text/javascript">
+    var status = "@status";
+    //返回商城
+    function goHome() {
+        window.location.href = "/User/Center";
+    }
+    //倒计时10分钟付款时间
+    var interval = 1000;
+    var totaltime = 5;//5S钟
+    function ShowCountDown(divname) {
+        totaltime = totaltime - 1;
+        var cc = document.getElementById(divname);
+        cc.innerHTML = totaltime;
+        if (totaltime <= 0) {
+            //alert('跳转');
+            window.location.href = "/User/Center";
+        }
+    }
+    if (status == 1) {
+        window.setInterval(function () { ShowCountDown('timer'); }, interval);
+    }
+</script>
+@if (status == "1")
+{
+    <div class="successPay">
+        <div class="successIndexa">
+            <span class="duiPicss"><img src="/images/duigou.png" /></span><span class="duigouss">恭喜您，该订单支付成功</span>
+            <p class="_colordarkss">您的支付方式：支付宝</p>
+            <p class="_colordarkss">您的订单号：@orderno</p>
+            <p class="_colordarkss">您的支付金额：<span style="color: #F08300; font-size: 22px;">￥@orderprice</span></p>
+            <p class="_colordarkssa"><span style="font-size: 22px;color: #F08300;" id="timer">5</span>秒后自动跳转</p>
+            <p class="_colordarkssa"><input type="button" value="返回商城" class="btnOrange" onclick="goHome()" /></p>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="failurePay">
+        <div class="failureIndexa">
+            <p class="failuretext"> <span class="failureimg"> <img src="/images/iconfailure.png"></span><span class="failurefont">对不起，支付失败！</span></p>
+            <div class="iconfailure">
+                <input name="submit" type="button" class="returnchoose" value="返回重选" onclick="goHome()" />
+            </div>
+        </div>
+    </div>
+}

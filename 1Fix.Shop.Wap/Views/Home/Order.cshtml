@@ -1,0 +1,211 @@
+﻿@using _1Fix.Entity
+@using _1Fix.Entity.Model
+@using _1Fix.Common
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var UserAddressList = ViewBag.UserAddressList as List<UserAddress>;
+    var id = Request["id"] == null ? 0 : Convert.ToInt32(Request["id"].ToString());
+    UserAddress DefaultUserAddress = null;
+    if (id > 0)
+    {
+        DefaultUserAddress = UserAddressList.Where(n => n.ID == id).FirstOrDefault();
+    }
+    else
+    {
+        DefaultUserAddress = UserAddressList.Where(n => n.is_default == 1).FirstOrDefault();
+    }
+    var CuSellPhone = ViewBag.CuSellPhone as CuSellPhone;
+    var IsDefault = DefaultUserAddress == null ? 0 : 1;
+    var AddressID = DefaultUserAddress == null ? 0 : DefaultUserAddress.ID;
+}
+<div class="container">
+    <div class="nav">
+        <!-- -->
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><a href="javascript:;"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我要购买>购买信息</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        <div class="commoditylist">
+            <div class="addresssection" id="addressArea">
+
+            </div>
+            <div class="pay">
+                <div class="row">
+                    <div class="col-md-1-1"></div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <div class="col-md-12 col-xs-2 col-xs-2-small" style="padding-top:5px;padding-bottom:10px;margin:auto 10px;"><span class="img-iphone01"><img width="80" src="/images/new_iphone/@(CuSellPhone.CheckFacility.phonename)_@(_1Fix.Utility.ImageHelper.GetImageColor(CuSellPhone.CheckFacility.color)).png" /></span> </div>
+                        <div class="col-xs-7 col-xs-8-phone">
+                            <span class="textcolor-03">
+                                <a href="#">
+                                    @(CuSellPhone.CheckFacility.phonename) @(CuSellPhone.CheckFacility.jb)级 <br>
+                                    @(CuSellPhone.CheckFacility.size) @(CuSellPhone.CheckFacility.color) @(CuSellPhone.CheckFacility.nettype)
+                                    @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                                    {
+                                        <span class="textcolor-04">￥@(CuSellPhone.SellPhone.PersonPrice)</span>
+                                    }
+                                    else
+                                    {
+                                        if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                                        {
+                                            <span class="textcolor-04">￥ @(CuSellPhone.SellPhone.BigCustomerPrice)</span>
+                                        }
+                                        else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                                        {
+                                            <span class="textcolor-04">￥ @(CuSellPhone.SellPhone.EnterprisePrice)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="textcolor-04">￥ @(CuSellPhone.SellPhone.PersonPrice)</span>
+                                        }
+                                    }
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-xs-1  "> <a href="/Home/Detail?sn=@(CuSellPhone.SellPhone.Sn)"><img src="/images/right_arrow-2.png" style="padding-top:22px;" /></a><span class="col-md-1-1 imgright"></span> </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1-1"></div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02" ischecked="1" id="aplipayImg" onclick="selAplipay(this, 'wxpayImg')">
+                        <div class="col-xs-1 col-sm-4 iconfont-01"> <img src="/images/chosen.png" /> </div>
+                        <div class="col-xs-2 col-sm-4 pay-1"> <img src="/images/alipay.png" /></div>
+                        <div class="col-xs-7 col-sm-4 textcolor-6"><span class="textcolor-06">支付宝支付</span></div>
+                        <div class="col-md-1-1"></div>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col-md-1-1"></div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02" ischecked="0" id="wxpayImg" onclick="selAplipay(this, 'aplipayImg')">
+                        <div class="col-xs-1 col-sm-4 iconfont-01"> <img src="/images/choose.png" /> </div>
+                        <div class="col-xs-2 col-sm-4 pay-1"> <img src="/images/wechat.png" /></div>
+                        <div class="col-xs-7 col-sm-4 textcolor-6"><span class="textcolor-06">微信支付</span></div>
+                        <div class="col-md-1-1"></div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+        <br><br><br><br>
+        @using (Ajax.BeginForm("SaveOrder", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successOrder" }, new { id = "UserOrderForm" }))
+        {
+            <span class="pink-share-1">
+                <div class="pink-first-1">
+                    @if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser == null)
+                    {
+                        <p class="pay-02">实付款：￥@(CuSellPhone.SellPhone.PersonPrice)</p>
+                    }
+                    else
+                    {
+                        if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "3")
+                        {
+                            <p class="pay-02">实付款：￥@(CuSellPhone.SellPhone.BigCustomerPrice)</p>
+                        }
+                        else if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "2")
+                        {
+                            <p class="pay-02">实付款：￥@(CuSellPhone.SellPhone.EnterprisePrice)</p>
+                        }
+                        else
+                        {
+                            <p class="pay-02">实付款：￥@(CuSellPhone.SellPhone.PersonPrice)</p>
+                        }
+                    }
+                </div>
+                <div class="pink-first-1 btnList-1" style="padding-left:0px;">
+                    <span class="img-01">
+                        <input type="hidden" id="hidUserAddressID" name="useraddressid" value="@(DefaultUserAddress == null ? 0 : DefaultUserAddress.ID)" />
+                        <input type="hidden" name="sn" value="@CuSellPhone.SellPhone.Sn" />
+                        <input type="hidden" name="ordernum" value="1" />
+                        @if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser == null)
+                        {
+                            <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.PersonPrice)" />
+                        }
+                        else
+                        {
+                            if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "3")
+                            {
+                                <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.BigCustomerPrice)" />
+                            }
+                            else if (_1Fix.Common.Wap.WapLoginUserManager.CurrLoginUser.VipGroup == "2")
+                            {
+                                <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.EnterprisePrice)" />
+                            }
+                            else
+                            {
+                                <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.PersonPrice)" />
+                            }
+                        }
+                        <input type="hidden" id="paytype" value="" />
+                        <button class="btn btn-03" onclick="return beforeSubmit()" type="submit">提交订单</button>
+                    </span>
+                </div>
+            </span>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    var isDefault = "@IsDefault";
+    var addressId = "@AddressID";
+    var sn = "@(CuSellPhone.SellPhone.Sn)";
+    if (isDefault == "1") {
+        //有默认地址
+        $("#addressArea").load("/Home/DefaultAddress", { id: addressId, sn: sn });
+    } else {
+        //无默认地址则新增一个地址
+        $("#addressArea").load("/Home/NewAddress", { sn: sn });
+    }
+    //提交订单前检测是否登录
+    function beforeSubmit() {
+        if ($("#useraddressid").val() == 0 || $("#useraddressid").val() == "") {
+            alert("请选择收货地址信息");
+            return false;
+        }
+    }
+    //选择支付方式
+    function selAplipay(obj, id) {
+        if (id == "wxpayImg") {
+            if ($(obj).attr("ischecked") == "0") {
+                $(obj).find("img").eq(0).attr("src", "/images/chosen.png");
+                $(obj).attr("ischecked", "1");
+                $("#" + id).find("img").eq(0).attr("src", "/images/choose.png");
+                $("#" + id).attr("ischecked", "0");
+                $("#paytype").val("1"); //支付宝支付方式
+            } else {
+                $(obj).find("img").eq(0).attr("src", "/images/choose.png");
+                $(obj).attr("ischecked", "0");
+                $("#paytype").val("0");
+            }
+        } else if (id == "aplipayImg") {
+            if ($(obj).attr("ischecked") == "0") {
+                $(obj).find("img").eq(0).attr("src", "/images/chosen.png");
+                $(obj).attr("ischecked", "1");
+                $("#" + id).find("img").eq(0).attr("src", "/images/choose.png");
+                $("#" + id).attr("ischecked", "0");
+                $("#paytype").val("2"); //微信支付方式
+            } else {
+                $(obj).find("img").eq(0).attr("src", "/images/choose.png");
+                $(obj).attr("ischecked", "0");
+                $("#paytype").val("0");
+            }
+        }
+    }
+    //生成订单后，提交支付宝支付
+    function successOrder(data) {
+        if (data.status > 0) {
+            window.location.href = "/Alipay/Submit?orderno=" + data.msg + "&totalfee=" + data.orderprice;
+        } else if (data.status == -1) {
+            alert("已经被买走，请重新选择商品下单");
+        } else {
+            alert("提交订单失败");
+        }
+    }
+</script>

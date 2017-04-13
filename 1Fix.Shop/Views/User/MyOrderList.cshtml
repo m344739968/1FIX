@@ -1,0 +1,103 @@
+﻿@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhoneOrder>
+@{
+    Layout = null;
+
+}
+@if (Model == null)
+{
+    <div>暂无数据</div>
+}
+else
+{
+    <div class="order-12">
+        <table width="946" border="1">
+            <tr>
+                <td width="139" height="58">产品图片</td>
+                <td width="138">产品名称</td>
+                <td width="129">颜色</td>
+                <td width="159">订单单号</td>
+                <td width="305">编号</td>
+                <td width="199">订单金额</td>
+                <td width="134">交易状态</td>
+                <td width="279">相关操作</td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td height="97"><img width="45" src="/images/new_iphone/@(item.CheckFacility.phonename)_@(_1Fix.Utility.ImageHelper.GetImageColor(item.CheckFacility.color)).png"></td>
+                    <td>@(item.CheckFacility.phonename)</td>
+                    <td>@(item.CheckFacility.color)</td>
+                    <td>@(item.SellPhoneOrder.OrderNo)</td>
+                    <td>@(item.CheckFacility.sn)</td>
+                    <td>￥@(item.SellPhoneOrder.OrderPrice - (item.SellPhoneOrder.CouponsPrice == null ? 0 : item.SellPhoneOrder.CouponsPrice))</td>
+                    <td>
+                        @switch (item.SellPhoneOrder.Status)
+                        {
+                            case 1:
+                                <span>已下单，未付款</span>
+                                break;
+                            case 2:
+                            <span>已付款，等待发货</span>
+                                break;
+                            case 3:
+                            <span>已付款，已发货</span>
+                                break;
+                            case 4:
+                            <span>交易成功</span>
+                                break;
+                            case 5:
+                            <span>未付款，已过期</span>
+                                break;
+                            default:
+                            <span>-</span>
+                                break;
+                        }
+                    </td>
+                    <td><a href="javascript:void(0);" onclick="payment(@item.SellPhoneOrder.Status,'@item.SellPhoneOrder.OrderNo')">付款</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+    @*<div id="page011"> <a href="#" class="page011_">上一页</a> <a href="#">1</a> <a href="#" class="current">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <a href="#">6</a> <a href="#" class="page011_">下一页</a> </div>*@
+    @*<div class="col-md-6">
+            <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+        </div>*@
+    @*<span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>*@
+    @Ajax.Pager(Model,
+            "",
+             new { target = "MyOrderList" },
+            new PagerOptions
+            {
+                PageIndexParameterName = "id",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divMyOrderList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    @*<div class="order-3"><span class="btn"> </span> </div>*@
+}
+<script type="text/javascript">
+    //进入付款页面
+    function payment(status, orderno) {
+        if (status == 2 || status == 3) {
+            alert("已经付款，不能重复操作");
+            return false;
+        } if (status == 5) {
+            alert("订单已过期,不能再操作");
+            return false;
+        }
+        window.location.href = "/Home/Payment?orderno=" + orderno;
+    }
+
+</script>

@@ -1,0 +1,34 @@
+﻿/*验证提示*/
+#divMsg label.error {
+    color: #ff0000;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 25px;
+    padding-left: 5px;
+    display:block;
+    margin-left:5px;
+}
+#divMsg label.right {
+    color: green;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 25px;
+    padding-left: 5px;
+    display:block;
+    margin-left:5px;
+}
+label.error {
+    color: #ff0000;
+    font-style: normal;
+    font-size: 12px;
+    padding-left: 5px;
+    margin-left:5px;
+}
+/*账号登录 start*/
+.signinSuccess {
+    color: green;
+}
+
+.signinFail {
+    color: red;
+}

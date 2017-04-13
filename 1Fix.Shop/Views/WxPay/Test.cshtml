@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Test";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+    var url = ViewBag.URL;
+    var wxEditAddrParam = ViewBag.wxEditAddrParam;
+    var openid = ViewBag.opendi;
+}
+@*<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+    <h4 id="weixin-modal-label" class="modal-title">微信支付-扫码支付模式二</h4>
+</div>
+<div class="modal-body">
+    <center><img src="/WxPay/GenerateWxPayQrCode?data=@url"><hr>拿出手机,打开微信,选择扫一扫功能即可完成支付</center>
+</div>*@
+
+<div>====================================================================================================================</div>
+
+<div>JSAPI H5微信页面支付</div>
+<div>
+    <div>openid:@openid</div>
+    <div>共享地址:@wxEditAddrParam</div>
+
+    <input value="立即购买" type="button" id="pay" />
+</div>
+<script type="text/javascript">
+    //获取共享地址
+    function editAddress() {
+        WeixinJSBridge.invoke(
+            'editAddress',
+            "@wxEditAddrParam",//josn串
+              function (res) {
+                  var addr1 = res.proviceFirstStageName;
+                  var addr2 = res.addressCitySecondStageName;
+                  var addr3 = res.addressCountiesThirdStageName;
+                  var addr4 = res.addressDetailInfo;
+                  var tel = res.telNumber;
+                  var addr = addr1 + addr2 + addr3 + addr4;
+                  alert(addr + ":" + tel);
+              }
+          );
+    }
+
+    window.onload = function () {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', editAddress, false);
+            }
+            else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', editAddress);
+                document.attachEvent('onWeixinJSBridgeReady', editAddress);
+            }
+        }
+        else {
+            editAddress();
+        }
+    };
+    var openid = "@openid";
+    function pay() {
+        $.ajax({
+            type: "post",
+            url: "http://jy.1fix.cn/wxpay/TestJsWxPay?openid=" + openid + "&total_fee=1",
+            success: function () {
+
+            }
+        });
+    }
+</script>
+

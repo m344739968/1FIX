@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Signin";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/base.css" rel="stylesheet" />
+<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<div class="mask-g"></div>
+<div class="WeChat-login" id="login_container"></div>
+<script type="text/javascript">
+    var obj = new WxLogin({
+        id: "login_container",
+        appid: "wx4db6cadada665c77",
+        scope: "snsapi_login",
+        redirect_uri: window.location.href,
+        state: "1438996839",
+        style: "black",
+        href: ""
+    });
+</script>

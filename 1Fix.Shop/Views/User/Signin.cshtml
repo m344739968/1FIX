@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Signin";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">登录</h4>
+</div>@using (Ajax.BeginForm("SaveSignin", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successSignin" }, new { id = "signinForm", @class = "signinForm" }))
+{
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-xs-2" style="margin-left: 20px; line-height: 35px;width:70px;">
+                    <span>账号：</span>
+                </div>
+                <div class="col-xs-5">
+                    <input type="text" required="" class="form-control" placeholder="账号" name="username">
+                </div>
+                <div class="col-xs-2" style="margin-left: 20px; line-height: 35px;"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-2" style="margin-left: 20px; line-height: 35px;width:70px;">
+                    <span>密码：</span>
+                </div>
+                <div class="col-xs-5">
+                    <input type="password" required="" class="form-control" placeholder="密码" name="password">
+                </div>
+                <div class="col-xs-2" style="margin-left: 20px; line-height: 35px;"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-2" style="margin-left: 20px; line-height: 35px;width:70px;">
+                    <span>验证码：</span>
+                </div>
+                <div class="col-xs-2">
+                    <input type="text" required="" class="form-control" placeholder="验证码" name="validcode">
+                </div>
+                <div class="col-xs-3">
+                    <img id="ImgCheckCode1" src="/User/GetSigninCheckCode" onclick="refreshCheckCode1()" width="98" height="25" title="Click the refresh." alt="Click the refresh." style="margin: 5px 30px; " />
+                </div>
+                <div class="col-xs-2" style="line-height: 35px;"></div>
+            </div>
+            @*<div class="form-group">
+                <div class="col-xs-9" style="text-align:center;">
+                    <label class="control-label" id="signinMsg"></label>
+                </div>
+            </div>*@
+            <div class="form-group" style="height:20px;">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-4" style="padding-top:30px;">
+                    <label class="control-label" id="signinMsg"></label>
+                </div>
+                <div class="col-xs-4" style="">
+                    
+                    <a class="btn btn-success" href="javascript:;" onclick="weixinSignin()">微信登录</a>
+                    <button type="submit" class="btn btn-primary" style="background-color: #f08300; border-color: #f08300; margin-left: 0px;">登录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="modal-footer">
+
+        </div>*@
+}
+
+<script type="text/javascript">
+    //微信登录
+    function weixinSignin() {
+        window.location.href = "/User/WeiXinSignin?Type=1";
+    }
+    //刷新验证码
+    function refreshCheckCode1() {
+        $("#ImgCheckCode1").attr("src", "/User/GetSigninCheckCode?rand=" + Math.random());
+    }
+    //登录回调函数
+    function successSignin(data) {
+        if (data.status == 1) {
+            $("#signinMsg").removeClass("signinFail").addClass("signinSuccess").html("<i class='glyphicon glyphicon-ok'></i>&nbsp;登录成功");
+            $('#singnin-modal').modal('hide');
+            window.location.href = window.location.href;
+        } else {
+            $("#signinMsg").removeClass("signinSuccess").addClass("signinFail").html("<i class='glyphicon glyphicon-remove'></i>&nbsp;" + data.msg);
+        }
+    }
+    jQuery("#signinForm").validate({
+        rules: {
+            username: {
+                required: true
+            },
+            password: {
+                required: true
+            },
+            validcode: {
+                required: true
+            }
+        },
+        messages: {
+            username: {
+                required: "请输入账号"
+            },
+            password: {
+                required: "请输入密码"
+            },
+            validcode: {
+                required: "请输入验证码"
+            }
+        }, errorPlacement: function (error, element) {
+            //alert(element.parent().parent().find("div").last().attr("class"));
+            error.appendTo(element.parent().parent().find("div").last());
+        }
+    });
+</script>

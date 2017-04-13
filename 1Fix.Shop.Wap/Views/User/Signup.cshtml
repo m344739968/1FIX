@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "Signup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><</span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">万修注册</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <div class="col-md-1 col-md-17"> </div>
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        @using (Ajax.BeginForm("SaveSignup", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successSignup" }, new { id = "signupForm", @class = "navbar-form navbar-left" }))
+        {
+            <div class="input-group">
+                <input type="text" name="validcode" class="form-control" placeholder="请输入验证码" aria-describedby="basic-addon2">
+                <span class="input-group-addon" id="basic-addon2">
+                    <img id="ImgCheckCode2" src="/User/GetSignupCheckCode" onclick="refreshCheckCode2()" width="98" height="25" title="Click the refresh." alt="Click the refresh." style="" />
+                </span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-6" style="padding-left:0px;">
+                        <input type="text" id="username" name="username" class="form-control form-control-2" placeholder="请输入手机号码">
+                    </div>
+                    <div class="col-xs-6" style="padding-left:25px;padding-right:2px;">
+                        <button id="btnSendPhone" onclick="sendPhoneValidCode(this)" class="btn btn-default btn-default02" style="background-color: #f08300;color:#fff;" type="button">获取短信验证码</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" name="phonevalidcode" class="form-control" placeholder="请输入手机短信验证码">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码">
+            </div>
+            <div class="form-group">
+                <input type="password" name="confirmpassword" class="form-control" placeholder="请确认密码">
+            </div>
+            <div id="divMsg"></div>
+            <button type="submit" class="btn btn-default navbar-btn navbar-btn1">注册</button>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    //全局变量 60s
+    var wait = 60;
+    //计算发送验证码间隔
+    function countTime(o, p) {//o为按钮的对象，p为可选，这里是60秒过后，提示文字的改变
+        var wait = getCookie("wait");// 60;//时间
+        if (wait <= 0) {
+            o.removeAttr("disabled");
+            o.text("获取验证码");//改变按钮中value的值
+            delCookie("wait");
+        } else {
+            o.attr("disabled", true);//倒计时过程中禁止点击按钮
+            o.text(wait + "秒后再获取验证码");//改变按钮中value的值
+            wait--;
+            setCookie("wait", wait);
+            setTimeout(function () {
+                countTime(o, p);//循环调用
+            },
+            1000)
+        }
+    }
+    //发送手机验证码
+    function sendPhoneValidCode(obj) {
+        var userPhone = $("#username").val();
+        if (userPhone != "") {
+            $.ajax({
+                type: "POST",
+                url: "/User/SendPhoneValidCode",
+                data: { userPhone: userPhone },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        setCookie("wait", 60);//倒计时间隔1分钟
+                        countTime($(obj), null);
+                    } else if (data.status == -1) {
+                        $("#divMsg").html("<label class=\"error\">短信接口错误，请重试</label>");
+                    } else {
+                        $("#divMsg").html("<label class=\"error\">发送失败，请重试</label>");
+                    }
+                }
+            });
+        } else {
+            $("#divMsg").html("<label class=\"error\">请输入手机号码</label>");
+        }
+    }
+    $(function () {
+        //计算获取验证码间隔 60秒发送一次
+        if (getCookie("wait")) {
+            countTime($("#btnSendPhone"), null);
+        }
+    });
+    //刷新验证码
+    function refreshCheckCode2() {
+        $("#ImgCheckCode2").attr("src", "/User/GetSignupCheckCode?rand=" + Math.random());
+    }
+    //注册回调函数
+    function successSignup(data) {
+        if (data.status > 0) {
+            $("#divMsg").html("<label class=\"right\">注册成功</label>");
+            window.location.href = "/User/Signin";
+        } else if (data.status == -1) {
+            $("#divMsg").html("<label class=\"error\">验证码不正确</label>");
+        } else if (data.status == -2) {
+            $("#divMsg").html("<label class=\"error\">手机验证码输入不正确</label>");
+        } else if (data.status == -3) {
+            $("#divMsg").html("<label class=\"error\">该账号已被注册,请重新输入账号</label>");
+        } else {
+            $("#divMsg").html("<label class=\"error\">注册失败</label>");
+        }
+    }
+    jQuery("#signupForm").validate({
+        rules: {
+            username: {
+                required: true,
+                remote: {
+                    type: "post",
+                    url: "/User/ValidUserName",
+                    data: {
+                        username: function () {
+                            return $("#username").val();
+                        }
+                    },
+                    dataType: "html",
+                    dataFilter: function (data, type) {
+                        //alert(data);
+                        if (data == "0")
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+            },
+            nickname: {
+                required: true
+            },
+            password: {
+                required: true
+            },
+            confirmpassword: {
+                required: true,
+                equalTo: '#password'
+            },
+            validcode: {
+                required: true
+            },
+            phonevalidcode: {
+                required: true
+            }
+        },
+        messages: {
+            username: {
+                required: "请输入手机号码",
+                remote: "该手机号码已被注册"
+            },
+            nickname: {
+                required: "请输入昵称"
+            },
+            password: {
+                required: "请输入密码"
+            },
+            confirmpassword: {
+                required: "请输入确认密码",
+                equalTo: "两次输入密码不一致"
+            },
+            validcode: {
+                required: "请输入验证码"
+            },
+            phonevalidcode: {
+                required: "请输入手机短信验证码"
+            }
+        }, errorPlacement: function (error, element) {
+            //error.appendTo(element.parent());
+            error.appendTo($("#divMsg"));
+        }
+    });
+</script>

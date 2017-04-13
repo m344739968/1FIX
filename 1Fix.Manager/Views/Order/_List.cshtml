@@ -1,0 +1,139 @@
+﻿@{
+    Layout = null;
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhoneOrder>
+@{ int i = 1;}
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            @*<th>#</th>*@
+            <th>ID</th>
+            @*<th>用户昵称</th>*@
+            <th>联系人</th>
+            <th>联系人电话</th>
+            <th>订单号</th>
+            <th>订单价格(元)</th>
+            <th>订单地址</th>
+            <th>订单日期</th>
+            <th>订单状态</th>
+            <th>发货人</th>
+            <th>发货快递单号</th>
+            <th>发货日期</th>
+            <th>订单详情</th>
+            <th>发货</th>
+            @*<th>编辑</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.SellPhoneOrder.ID</td>
+                @*<td>@item.UserInfo.nickname</td>*@
+                <td>@item.UserAddress.user_name</td>
+                <td>@item.UserAddress.user_phone</td>
+                <td>@item.SellPhoneOrder.OrderNo</td>
+                <td>@item.SellPhoneOrder.OrderPrice</td>
+                <td>@item.UserAddress.province @item.UserAddress.city @item.UserAddress.area @item.UserAddress.user_address</td>
+                <td>@item.SellPhoneOrder.OrderDate</td>
+                <td>
+                    @if (item.SellPhoneOrder.Status == 1)
+                    {
+                        <span>已下单，未付款</span>
+                    }
+                    else if (item.SellPhoneOrder.Status == 2)
+                    {
+                        <span>已付款，等待发货</span>
+                    }
+                    else if (item.SellPhoneOrder.Status == 3)
+                    {
+                        <span>已发货</span>
+                    }
+                    else if (item.SellPhoneOrder.Status == 4)
+                    {
+                        <span>交易成功</span>
+                    }
+                    else if (item.SellPhoneOrder.Status == 5)
+                    {
+                        <span>未付款，已过期</span>
+                    }
+                </td>
+                <td>@item.SellPhoneOrder.SendPerson</td>
+                <td>@item.SellPhoneOrder.SendCourierNo</td>
+                <td>@item.SellPhoneOrder.SendDate</td>
+                <td class="table-success">
+                    <a href="#" onclick="showModal1('@item.SellPhoneOrder.OrderNo')" data-toggle="modal"><i class="glyphicon glyphicon-list"></i></a>
+                    @*<a class="delete-row" href=""><i class="fa fa-trash-o"></i></a>*@
+                </td>
+                <td>
+                    <a href="#" onclick="showModal2(@item.SellPhoneOrder.Status,'@item.SellPhoneOrder.OrderNo')" data-toggle="modal"><i class="fa fa-truck"></i></a>
+                </td>
+            </tr>
+                    i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-6">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(orderNo) {
+        $("#myModal1").modal({
+            remote: "/Order/OrderDetail?orderno=" + orderNo
+        });
+    }
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal2").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //弹出发货页面
+    function showModal2(status,orderNo) {
+        if(status==2){
+            $("#myModal2").modal({
+                remote: "/Order/OrderSend?orderno=" + orderNo
+            });
+        }else
+        {
+            alert("未付款或已发货，不能操作");
+        }
+    }
+</script>

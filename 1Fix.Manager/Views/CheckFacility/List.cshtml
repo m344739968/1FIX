@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity
+@model PagedList<CheckFacility>
+@{ int i = 1;}
+<script src="~/js/lodop/LodopFuncs.js"></script>
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>IMEI</th>
+            <th>颜色</th>
+            <th>内存</th>
+            <th>型号</th>
+            <th>合约机</th>
+            <th>等级</th>
+            <th>版本</th>
+            <th>网络制式</th>
+            <th>保修期</th>
+            <th>修改保修期</th>
+            <th>打印</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.ID</td>
+                <td>@item.phonename</td>
+                <td>@item.sn</td>
+                <td>@item.color</td>
+                <td>@item.size</td>
+                <td>@item.model</td>
+                <td>
+                    @if (item.Contractmachine == 1)
+                    {
+                        <span>合约机</span>
+                    }
+                    else
+                    {
+                        <span>非合约机</span>
+                    }
+                </td>
+                <td>@item.jb</td>
+                <td>@item.country</td>
+                <td>@item.nettype</td>
+                <td>
+                    @if (item.quality == 0)
+                    {
+                        <p>无保质</p>
+                    }
+                    else if (item.quality == 3)
+                    {
+                        <p style="font-size:12px;">@(item.quality)个月</p>
+                    }
+                    else if (item.quality == 6)
+                    {
+                        <p style="font-size:12px;">@(item.quality)个月</p>
+                    }
+                </td>
+                <td>
+                    <a href="#" onclick="showModal1(@item.ID)" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                </td>
+                <td class="table-success">
+                    <a href="#" onclick="prn_preview('@item.sn')" data-toggle="modal"><i class="fa fa-print"></i></a>
+                </td>
+            </tr>
+                    i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-5">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-7">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(id) {
+        $("#myModal1").modal({
+            remote: "/CheckFacility/Quality?ID=" + id
+        });
+    }
+</script>
+<script type="text/javascript">
+    //打印操作
+    var LODOP; //声明为全局变量
+    function prn_print(sn) {
+        CreatePage(sn);
+        LODOP.PRINTA();
+    }
+    function prn_preview(sn) {
+        CreatePage(sn);
+        LODOP.PREVIEW();
+    };
+    function CreatePage(sn) {
+        LODOP = getLodop();
+        LODOP.PRINT_INIT("打印控件功能演示_Lodop功能");
+        LODOP.SET_PRINT_PAGESIZE(2, 0, 0, "A4");
+        //LODOP.SET_PRINT_STYLEA(2, "FontSize", 18);
+        //LODOP.SET_PRINT_STYLEA(2, "Bold", 1);
+        var host = window.location.href;
+        var url = "/Print?userid=@_1Fix.Common.LoginUserManager.CurrLoginUser.UserId&username=@_1Fix.Common.LoginUserManager.CurrLoginUser.UserName&sn=" + sn;
+        LODOP.ADD_PRINT_URL(15, 5, "RightMargin:2mm", "BottomMargin:2mm", url);
+        //LODOP.NewPage();
+        //LODOP.ADD_PRINT_HTM(15, -60, "RightMargin:2mm", "BottomMargin:2mm", "<img border='0' src='/Images/1FIX.png' />");
+        //LODOP.ADD_PRINT_HTM(87, 355, 285, 187, document.getElementById("form2").innerHTML);
+        //LODOP.ADD_PRINT_TEXT(319, 58, 500, 30, "注：其中《表单一》按显示大小，《表单二》在程序控制宽度(285px)内自适应调整");
+    };
+</script>

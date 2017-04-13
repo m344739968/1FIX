@@ -1,0 +1,58 @@
+USE [SellData]
+GO
+/****** Object:  StoredProcedure [dbo].[proc_DealNoPayOrder]    Script Date: 09/17/2015 17:22:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[proc_DealNoPayOrder]
+as
+if OBJECT_ID('tempdb..#NoPayOrder') is not null drop table #NoPayOrder
+--获取未付款并已经过期的订单
+select a.OrderNo,b.Sn into #NoPayOrder
+	from SellPhoneOrder a
+	left join SellPhoneOrderDetail b on a.OrderNo=b.OrderNo
+	where a.Status=1 and a.ExpireDate<GETDATE()
+--select * from #NoPayOrder
+--修改寄售手机状态 ==>上架
+update SellPhone set Status=0 where Status=1 and Sn in(select Sn from #NoPayOrder)
+--修改订单状态 ==>未付款，已过期
+update SellPhoneOrder set Status=5 where Status=1 and OrderNo in(select OrderNo from #NoPayOrder)
+
+
+
+
+USE [SellData]
+GO
+/****** Object:  StoredProcedure [dbo].[proc_GenerateOrderNo]    Script Date: 09/17/2015 17:22:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[proc_GenerateOrderNo]
+as
+declare @temp varchar(50)
+declare @len int
+declare @CurrDate varchar(50)
+declare @CurrPrefix varchar(50)
+declare @CurrNum int
+declare @OrderNo varchar(100)
+select @CurrDate=CONVERT(varchar(12) , getdate(), 112 )
+set @temp='000000'
+set @len=6
+if exists(select 1 from SellGenerateOrderNo where CurrDate=@CurrDate)
+begin
+	select @CurrPrefix=Prefix,@CurrNum=Num from SellGenerateOrderNo where CurrDate=@CurrDate
+	set @CurrNum=@CurrNum+1
+	set @OrderNo=@CurrPrefix+right(@CurrDate,8)+RIGHT(@temp+CONVERT(nvarchar,@CurrNum),@len)
+	update SellGenerateOrderNo set Num=@CurrNum,CurrOrderNo=@OrderNo where CurrDate=@CurrDate
+	select @OrderNo
+end
+else
+begin
+	set @CurrPrefix=''
+	set @CurrNum=1
+	set @OrderNo=@CurrPrefix+right(@CurrDate,8)+RIGHT(@temp+CONVERT(nvarchar,@CurrNum),@len)
+	insert into SellGenerateOrderNo values(@CurrPrefix,@CurrDate,@CurrNum,@OrderNo)
+	select @OrderNo
+end

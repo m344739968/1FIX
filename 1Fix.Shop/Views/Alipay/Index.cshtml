@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("Submit", "Alipay", FormMethod.Post))
+{
+    <input type="submit" value="在线支付" />
+    <a href="/Alipay/Submit" target="_blank">在线支付</a>
+}

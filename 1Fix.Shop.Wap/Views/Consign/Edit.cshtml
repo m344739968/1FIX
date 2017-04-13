@@ -1,0 +1,135 @@
+﻿@using _1Fix.Entity
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SellAddress selladdress = ViewBag.SellAdress as SellAddress;
+    List<SellPhoneModel> sellphonemodellist = ViewBag.SellPhoneModelList as List<SellPhoneModel>;
+}
+<div class="container ">
+    <div class="nav">
+        <!-- -->
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="javascript:;"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我要寄售</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        <div class="commoditylist">
+            <div class="row">
+                <div class="col-md-1-1"></div>
+                <div class="col-md-12 col-xs-12 col-md-1-02"><h3 class="Delivered">填写寄售信息</h3></div><div class="col-md-12"> </div>
+            </div>
+            @using (Ajax.BeginForm("SaveSellBaseInfo", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editSellBaseInfoForm" }))
+            {
+                <div class="row">
+                    <div class="col-md-1-1"></div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">手机型号：</span>
+                        <span class="textcolor">
+                            <select style="width: 50%;height: 30px;" name="PhoneModelID">
+                                @foreach (SellPhoneModel item in sellphonemodellist)
+                                {
+                                    <option value="@item.ID">@item.PhoneName</option>
+                                }
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">您的姓名：</span>
+                        <span class="textcolor"><input type="text" name="ContactName" placeholder="请输入您的姓名" class="textWord-01" style="border-style: none; background: #f7f7f7; " /> </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">联系电话：</span>
+                        <span class="textcolor"><input type="text" name="ContactPhone" placeholder="请输入您的联系电话" class="textWord-01" style="border-style: none; background: #f7f7f7; " /> </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">IMEI串号：</span>
+                        <span class="textcolor"><input type="text" name="Sn" placeholder="在拨号面板输入*#06#即可查看IMEI码" class="textWord-01" style="border-style: none; background: #f7f7f7; " /> </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">快递单号：</span>
+                        <span class="textcolor"><input type="text" name="CourierNo" placeholder="请输入您的快递单号" class="textWord-01" style="border-style: none; background: #f7f7f7; " /> </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">寄售地址：</span>
+                        <span class="textcolor">
+                            @selladdress.SellAddress1
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">&nbsp;&nbsp;&nbsp;收件人：</span>
+                        <span class="textcolor">
+                            @selladdress.Receiver
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02">
+                        <span class="img-011">联系电话：</span>
+                        <span class="textcolor">
+                            @selladdress.ReceiverPhone
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1-1">
+                        <div id="divMsg" style="text-align:center;"></div>
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-md-1-02" style="text-align :center;">
+                        <span class="img-01">
+                            <button class="btn btn-default btn-02" type="submit"> 保存</button>
+                        </span>
+                        <span class="textcolor"> </span>
+                        <div class="col-md-1-1"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function success(data) {
+        if (data.status > 0) {
+            $("#divMsg").html("<label class=\"right\">保存成功</label>");
+            window.location.href = "/Consign/Index";
+        }
+    }
+    jQuery("#editSellBaseInfoForm").validate({
+        rules: {
+            ContactName: {
+                required: true
+            },
+            ContactPhone: {
+                required: true
+            },
+            Sn: {
+                required: true
+            },
+            CourierNo: {
+                required: true
+            }
+        },
+        messages: {
+            ContactName: {
+                required: "请输入您的姓名"
+            },
+            ContactPhone: {
+                required: "请输入联系电话"
+            },
+            Sn: {
+                required: "请输入IMEI串号"
+            },
+            CourierNo: {
+                required: "请输入快递单号"
+            }
+        }, errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+</script>

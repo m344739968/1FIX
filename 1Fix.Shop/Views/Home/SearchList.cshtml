@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+}
+@using _1Fix.Utility
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhone>
+<script type="text/javascript">
+    function goDetail(sn) {
+        window.location.href = "/Home/Detail?sn=" + sn;
+    }
+</script>
+<ul id="products">
+    @foreach (var item in Model)
+    {
+        <li onclick="goDetail('@item.SellPhone.Sn')">
+            <div class="box ">
+                @if (item.CheckFacility.jb != null)
+                {
+                    if (item.CheckFacility.jb.Trim() == "G")
+                    {
+                        <label>GD 级</label>
+                    }
+                    else if (item.CheckFacility.jb.Trim() == "F")
+                    {
+                        <label>FR 级</label>
+                    }
+                    else
+                    {
+                        <label>@(item.CheckFacility.jb) 级</label>
+                    }
+                }
+                else
+                {
+                    <label>@(item.CheckFacility.jb) 级</label>
+                }
+                <span><img src="/Images/new_iphone/@(item.CheckFacility.phonename)_@(ImageHelper.GetImageColor(item.CheckFacility.color)).png"></span>
+                <h3>
+                    @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                    {
+                        <p>￥ @(item.SellPhone.PersonPrice)</p>
+                    }
+                    else
+                    {
+                        if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                        {
+                            <p>￥ @(item.SellPhone.BigCustomerPrice)</p>
+                        }
+                        else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                        {
+                            <p>￥ @(item.SellPhone.EnterprisePrice)</p>
+                        }
+                        else
+                        {
+                            <p>￥ @(item.SellPhone.PersonPrice)</p>
+                        }
+                    }
+                </h3>
+                <div class="Purchase">
+                    <p><i>@(item.SellPhone.ClickNum == null ? 0 : item.SellPhone.ClickNum)人感兴趣</i></p>
+                </div>
+                <p>@(item.CheckFacility.phonename) @(item.CheckFacility.color) @(item.CheckFacility.nettype) @(item.CheckFacility.size) </p>
+                <p>@(item.SellPhone.Title)</p>
+                @*<a href="Second_hand_goods/31.html" class="btn">立即购买</a>*@
+            </div>
+        </li>
+    }
+</ul>
+<div class="clear"> </div>
+<div class="DivH40"></div>
+<div class="DivH20"></div>
+<div class="flickr"></div>
+<div class="DivH40"></div>
+<div class="jiaMOre1">
+    @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "sellPhoneList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    @*<div id="page011"> <a href="#" class="page011_">上一页</a> <a href="#">1</a> <a href="#" class="current">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <a href="#">6</a> <a href="#" class="page011_">下一页</a> </div>*@
+</div>

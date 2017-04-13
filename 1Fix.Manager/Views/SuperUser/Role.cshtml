@@ -1,0 +1,55 @@
+﻿@using _1Fix.Entity
+@using _1Fix.Common
+@model SuperUser
+@{
+    Layout = null;
+    List<group> menulist = ViewBag.MenuList as List<group>;
+}
+<script type="text/javascript">
+    var toplevel = "@(Model!=null?Model.TopLevel:"")";
+    $(function () {
+        $("input[name='toplevel']").each(function (i, item) {
+            if (toplevel.indexOf("," + $(this).val() + ",") > -1) {
+                $(this).attr("checked", true);
+            }
+        });
+    })
+    function success(data) {
+        if (data.status > 0) {
+            alert("保存成功");
+            $('#myModal2').modal('hide');
+            //window.location.href = "/SuperUser/Index";
+        }
+    }
+</script>
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">权限设置</h4>
+</div>
+@using (Ajax.BeginForm("SaveSuperUserRole", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editSuperUserRoleForm" }))
+{
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">权限设置：<span class="asterisk"></span></label>
+                    <div class="col-sm-9">
+                        @foreach (group item in menulist)
+                        {
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" name="toplevel" id="checkbox@(item.id)" value="@(item.id)">
+                                <label for="checkbox@(item.id)">@(item.text)</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="ID" value="@(Model==null?0:Model.id)" />
+        <button data-dismiss="modal" class="btn btn-default" id="btnClose" type="button">关闭</button>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </div>
+}
+

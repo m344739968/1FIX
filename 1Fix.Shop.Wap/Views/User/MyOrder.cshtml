@@ -1,0 +1,82 @@
+﻿@using _1Fix.Entity.Model
+@using Webdiyer.WebControls.Mvc
+@model PagedList<CuSellPhoneOrder>
+@{
+    ViewBag.Title = "MyOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container ">
+    <!--nav -->
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="#"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我的购买</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-xs-5 col-md-8"><img width="163" src="/images/new_iphone/@(item.CheckFacility.phonename)_@(_1Fix.Utility.ImageHelper.GetImageColor(item.CheckFacility.color)).png" /> </div>
+                <div class="col-xs-7 col-md-4 phonetext1">
+                    <p class="phonetext">@(item.CheckFacility.phonename)   @(item.CheckFacility.color)</p>
+                    <p class="phonetext"> 订单单号:@(item.SellPhoneOrder.OrderNo) </p>
+                    <p class="phonetext"> 手机编号：@(item.CheckFacility.sn) </p>
+                    @*<p class="phonetext"> 快递单号:1235466789 </p>*@
+                    <p class="phonetext">
+                        交易状态:
+                        @switch (item.SellPhoneOrder.Status)
+                        {
+                            case 1:
+                                <span class="phonetext2">已下单，未付款</span>
+                                break;
+                            case 2:
+                            <span class="phonetext2">已付款，等待发货</span>
+                                break;
+                            case 3:
+                            <span class="phonetext2">已付款，已发货</span>
+                                break;
+                            case 4:
+                            <span class="phonetext2">交易成功</span>
+                                break;
+                            case 5:
+                            <span class="phonetext2">未付款，已过期</span>
+                                break;
+                            default:
+                            <span class="phonetext2">-</span>
+                                break;
+                        }
+                    <p class="phonetext"> 订单金额：<span class="phonetext2">￥@(item.SellPhoneOrder.OrderPrice) </span></p>
+                    <p class="phonetext"> 相关操作：<span class="phonetext2"><a href="javascript:;" onclick="payment(@item.SellPhoneOrder.Status,'@item.SellPhoneOrder.OrderNo',@item.SellPhoneOrder.OrderPrice)">立即付款 </a></span></p>
+                </div>
+            </div>
+            <!-- line -->
+            <div class="row"><div class="line"> </div></div>
+        }
+    </div>
+    <!--分页-->
+    <div id="loadingDiv" class="loading" style="display:none;text-align:center;">
+        <img src="/images/loading.gif"><span>正在加载...</span>
+    </div>
+</div>
+<script type="text/javascript">
+    //进入付款页面
+    function payment(status, orderno, totalfee) {
+        if (status == 2 || status == 3) {
+            alert("已经付款，不能重复操作");
+            return false;
+        } if (status == 5) {
+            alert("订单已过期,不能再操作");
+            return false;
+        }
+        window.location.href = "/Alipay/Submit?orderno=" + orderno + "&totalfee=" + totalfee;
+    }
+</script>

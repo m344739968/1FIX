@@ -1,0 +1,236 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    * {
+        box-sizing: content-box;
+    }
+</style>
+<div class="page-1">
+    <div class="fuwu_lc">
+        <div class="xuzhi">
+            <div class="main001">
+                <p class="processtext001">寄售流程</p>
+            </div>
+            <div class="main002">
+                <div class="tab1">
+                    <div class="wrap">
+                        <div class="sectionwrap1"><img src="/images/twocode.png" width="234" height="234"></div>
+                        <div class="sectionwrap2">
+                            <div class="boxs">
+                                <div class="sectifont1"> <img src="/images/nub-02.png"> </div>
+                                <div class="sectifont2">完善个人信息</div>
+                            </div>
+                            <div class="sfont">
+                                只需要输入手机型号，联系电话，IMEI串号，
+                                快递单号并提交，万修客服即刻为您服务。
+                            </div>
+                        </div>
+                        <div class="sectionwrap3"><img src="/images/girl.png"> </div>
+                        <div class="sectionwrap4">
+                            <div class="sectifont1"> <img src="/images/nub-04.png"> </div>
+                            <div class="sectifont2">顺风快递至买家</div>
+                        </div>
+                    </div>
+                    <div class="sideicon"><img src="/images/nub-05.png"></div>
+                    <div class="msg">
+                        <div class="sectionmsg1">
+                            <div class="sectifont1"> <img src="/images/nub-01.png"> </div>
+                            <div class="sectifont2">注册帐号</div>
+                            <p class="sfont">注册帐号简单快捷，只需要用微信扫一扫，即可完成注册。同时每次登录也只扫码即可。</p>
+                        </div>
+                        <div class="sectionmsg2"><img src="/images/pan.png"> </div>
+                        <div class="sectionmsg3">
+                            <div class="sectifont1"> <img src="/images/nub-03.png"> </div>
+                            <div class="sectifont2">检测通过</div>
+                            <p class="sfont">通过万修质检，并在个人中心，我的寄售中填写出售价格。</p>
+                        </div>
+                        <div class="sectionmsg4"> <img src="/images/sf1.png"></div>
+                    </div>
+                    <div class="consigtext-2"><a href="#" onclick="showModal1()" data-toggle="modal"><img src="/images/agreed.png"></a></div>
+                </div>
+            </div>
+        </div>
+        <div class="mai n001-4"><span class="consi gtext-2"> </span></div>
+    </div>
+    <div class="process-1"></div>
+    <div class="process-2"></div>
+    <div class="process-3"></div>
+</div>
+<div class="main001-2">
+    <div class="main001">
+        <p class="processtext001">寄售须知</p>
+    </div>
+</div>
+<div class="main003">
+    <div class="quality-testing W1024" id="001">
+        <div class="DivH40"></div>
+        <div class="process">
+            <ul>
+                <li><img src="/images/notice-01.png"></li>
+                <li class="process_title">
+                    <h3>取消密码</h3>
+                    <p>请于寄送前取消手机开机密码，以便我们能够正常开机进入系统做功能性检测，所有带开机密码的手机，万修科技都会封包退回。</p>
+                </li>
+                <div class="clear"> </div>
+            </ul>
+        </div>
+        <div class="process">
+            <ul>
+                <li><img src="/images/notice-02.png"></li>
+                <li class="process_title">
+                    <h3>退出账户</h3>
+                    <p>请于寄送前退出设置中已登录的个人账户，如果是iPhone请退出解绑iCloud账户。未解绑的手机存在被找回的风险，无法销售给新的用户。</p>
+                </li>
+                <div class="clear"> </div>
+            </ul>
+        </div>
+        <div class="process">
+            <ul>
+                <li><img src="/images/notice-03.png"></li>
+                <li class="process_title">
+                    <h3>数据备份</h3>
+                    <p>请务必做好手机内的所有数据的备份工作，万修科技收到手机后会在第一时间做数据底层的清除，不做任何备份，因数据丢失所造成的损失万修科技概不负责。</p>
+                </li>
+                <div class="clear"> </div>
+            </ul>
+        </div>
+        <div class="process">
+            <ul>
+                <li><img src="/images/notice-04.png"></li>
+                <li class="process_title">
+                    <h3>其它须知</h3>
+                    <p>如果您对万修科技高品质寄售平台有任何疑问，请详细阅读寄售须知，或关注“万修科技”微信公众帐号，与客服取得联系。</p>
+                </li>
+                <div class="clear"> </div>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="line"></div>
+    </div>
+</div>
+<div class="main001">
+    <p class="processtext001">寄售承诺</p>
+</div>
+<div class="main001-3"> <span class="consigtext-1"> </span></div>
+<div class="main004">
+    <div class="quality-testing W1024" name="002" id="002">
+        <div class="DivH20"></div>
+        <ul class="info-list">
+            <li>
+                <div class="liu_left"><img src="/images/hg-01.png"></div>
+                <div class="liu_right">
+                    <h3>视频记录</h3>
+                    <p>万修科技自收到寄售产品后，质检过程全程视频记录，确保质检公开、透明。 </p>
+                </div>
+                <div class="clear"> </div>
+            </li>
+            <li>
+                <div class="liu_left"><img src="/images/hg-02.png"></div>
+                <div class="liu_right">
+                    <h3> 自主定价</h3>
+                    <p>卖家可根据市场情况的变化，为自己产品随时改变出售价格。</p>
+                </div>
+                <div class="clear"> </div>
+            </li>
+            <li>
+                <div class="liu_left"> <img src="/images/hg-03.png"></div>
+                <div class="liu_right">
+                    <h3>便捷上架</h3>
+                    <p>万修科技会为卖家录入产品绝大部分的信息，您只需要填写几项内容。 </p>
+                </div>
+                <div class="clear"> </div>
+            </li>
+            <li>
+                <div class="liu_left"><img src="/images/hg-04.png"></div>
+                <div class="liu_right">
+                    <h3>隐私保护</h3>
+                    <p>上线销售前，万修科技会彻底清除您手机中的信息及数据，确保您的隐私不会泄露。</p>
+                </div>
+                <div class="clear"> </div>
+            </li>
+            <li>
+                <div class="liu_left"> <img src="/images/hg-05.png"></div>
+                <div class="liu_right">
+                    <h3>顺丰包邮</h3>
+                    <p>寄卖过程全程顺丰包邮，给您更快的速度，更好的服务。</p>
+                </div>
+                <div class="clear"> </div>
+            </li>
+            <li>
+                <div class="liu_left"> <img src="/images/hg-06.png"></div>
+                <div class="liu_right">
+                    <h3>出售无忧</h3>
+                    <p>万修科技会承担产品一切售后问题，并对买家信息严格保密，不会对您造成困扰。（赃机除外） </p>
+                </div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        <div class="DivH40"></div>
+        <div class="line"></div>
+    </div>
+</div>
+<div class="main001-5">
+    <div class="main001">
+        <p class="processtext001">了解质检</p>
+    </div>
+</div>
+<div class="main005">
+    <div class="quality-testing W1024" name="003" id="003">
+        <div class="line"></div>
+        <div class="DivH40"></div>
+        <div class="DivH40"></div>
+        <ul class="info-list2">
+            <li>
+                <div class="liu_left">
+                    <img src="/images/danhao.png" style="padding: 62px 0;">
+                    <h4>扫描运单号，登记信息</h4>
+                </div>
+                <div class="liu_left">
+                    <img src="/images/zhi_1.png">
+                    <h4>核实描述情况，检测机器功能</h4>
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <div class="liu_left">
+                    <img src="/images/zhi_3.png">
+                    <h4>屏幕显示触摸情况，屏幕是否有划痕</h4>
+                </div>
+                <div class="liu_left">
+                    <img src="/images/zhi_4.png">
+                    <h4>外观成色鉴定，是否有拆修</h4>
+                </div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        <div class="DivH40"></div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var isLogin = "@_1Fix.Common.WeiXinLoginUserManager.IsLogin";
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //修改价格
+    function showModal1() {
+        if (isLogin == "True") {
+            $("#myModal1").modal({
+                remote: "/Consign/Edit?rnad=" + Math.random()
+            });
+        } else {
+            $("#signin-modal").modal({
+                remote: "/User/Signin?rand=" + Math.random()
+            });
+        }
+    }
+</script>

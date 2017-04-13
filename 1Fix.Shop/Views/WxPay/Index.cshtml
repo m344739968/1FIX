@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+    var url = ViewBag.URL;
+    var orderno = ViewBag.OrderNo;
+    var totalfee = ViewBag.TotalFee;
+}
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+    <h4 id="weixin-modal-label" class="modal-title">微信支付</h4>
+</div>
+<div class="modal-body">
+    <center><img src="/WxPay/GenerateWxPayQrCode?data=@url"><hr>拿出手机,打开微信,选择扫一扫功能即可完成支付</center>
+</div>
+<script type="text/javascript">
+    var orderno = "@orderno";
+    var totalfee = "@totalfee";
+    $(document).ready(function () {
+        setInterval(queryOrderState, 3000);
+    });
+    //return RedirectToAction("PaySuccess", "Home", new { status = 1, orderno = out_trade_no, orderprice = model.Totalfee });
+    function queryOrderState() {
+        $.ajax({
+            type: "post",
+            url: "/WxPay/QueryOrder?orderno=" + orderno,
+            data: "",
+            dataType: "json",
+            timeout: 4000,
+            async: false,
+            success: function (result) {
+                if (result.status == 1) {
+                    //直接跳到成功页
+                    window.location.href = "/WxPay/PaySuccess?status=1&orderno=" + orderno + "&orderprice=" + totalfee + "&rand=" + Math.random();
+                }
+            }
+        });
+    }
+</script>

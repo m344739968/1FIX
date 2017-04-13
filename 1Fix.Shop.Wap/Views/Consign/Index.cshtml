@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container ">
+    <div class="nav">
+        <!-- -->
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="javascript:;"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我要寄售</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        <div class="commoditylist">
+            <div class="row">
+                <div class="col-xs-12 ">
+                    <div class="main002">
+                        <div class="tab1">
+                            <div class="wrap">
+                                <div class="sectionwrap1"><img src="/images/twocode.png" class="img-responsive" alt="Responsive image" /></div>
+                                <div class="sectionwrap2">
+                                    <div class="boxs">
+                                        <div class="sectifont1"> <img src="/images/nub-02.png" class="img-responsive img-responsive07" alt="Responsive image" /> </div>
+                                        <div class="sectifont2">完善个人信息</div>
+                                    </div>
+                                    <div class="sfont">
+                                        只需要输入手机型号，联系电话，IMEI串号，
+                                        快递单号并提交，万修客服即刻为您服务。
+                                    </div>
+                                </div>
+                                <div class="sectionwrap3"><img src="/images/girl.png" class="img-responsive" alt="Responsive image" /> </div>
+                                <div class="sectionwrap4">
+                                    <div class="sectifont1"><img src="/images/nub-04.png" class="img-responsive img-responsive07" alt="Responsive image" /> </div>
+                                </div>
+                                <div class="sectifont2">顺风快递至买家</div>
+                            </div>
+                        </div>
+                        <div class="sideicon"><img src="/images/nub-05.png" class="img-responsive" alt="Responsive image" /></div>
+                        <div class="msg">
+                            <div class="sectionmsg1">
+                                <div class="sectifont1"> <img src="/images/nub-01.png" class="img-responsive img-responsive07" alt="Responsive image" /> </div>
+                                <div class="sectifont2">注册帐号</div>
+                                <p class="sfont">注册帐号简单快捷，只需要用微信扫一扫，即可完成注册。同时每次登录也只 码即可。</p>
+                            </div>
+                            <div class="sectionmsg2"><img src="/images/pan.png" class="img-responsive" alt="Responsive image" /> </div>
+                            <div class="sectionmsg3">
+                                <div class="sectifont1"> <img src="/images/nub-03.png" class="img-responsive img-responsive07" alt="Responsive image" /></div>
+                                <div class="sectifont2">检测通过</div>
+                                <p class="sfont">通过万修质检，并在个人中心，我的寄售中填写出售价格。</p>
+                            </div>
+                            <div class="sectionmsg4"> <img src="/images/sf1.png" class="img-responsive" alt="Responsive image" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1-1"></div>
+            <div class="col-md-12 col-xs-12 col-md-1-02">
+                <span class="img-017">
+                    <button class="btn btn-default btn-021-1" type="button" onclick="location.href = '/Consign/Edit';">同意流程</button>
+                </span> <span class="textcolor"> </span>
+                <div class="col-md-1-1"></div>
+            </div>
+        </div>
+    </div>
+</div>

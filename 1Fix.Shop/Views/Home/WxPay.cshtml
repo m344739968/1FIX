@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "WxPay";
+    Layout = null;// "~/Views/Shared/_Layout.cshtml";
+    var url = ViewBag.URL;
+}
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+    <h4 id="weixin-modal-label" class="modal-title">微信支付</h4>
+</div>
+<div class="modal-body">
+    <center><img src="/Home/GenerateWxPayQrCode?data=@url"><hr>拿出手机,打开微信,选择扫一扫功能即可完成支付</center>
+</div>

@@ -1,0 +1,55 @@
+﻿@using _1Fix.Utility
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity.Model
+@model PagedList<CuSellPhone>
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/jquery.masonry.min.js"></script>
+<script src="~/js/jquery.infinitescroll.min.js"></script>
+<div>瀑布式分页</div>
+<div id="content">
+    <ul id="products">
+        @Html.Partial("page", Model)
+    </ul>
+</div>
+<div id="loadingDiv" class="loading">
+    <img src="/images/loading.gif"><span>正在加载...</span>
+</div>
+<script type="text/javascript">
+    var totalPage = "@Model.TotalPageCount";
+    var currentPage = "@Model.CurrentPageIndex";  //Infinate Scroll starts from second block
+    var inProgress = false;
+    $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() -
+        $(window).height() && !inProgress) {
+            inProgress = true;
+            currentPage = parseInt(currentPage) + 1;
+            if (parseInt(currentPage) > parseInt(totalPage)) {
+                //alert('分页完了');
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "/Home/Page?page=" + currentPage,
+                    data: {},
+                    beforeSend: function () {
+                        $("#loadingDiv").show();
+                    },
+                    error: function () {
+                        $("#loadingDiv").hide();
+                    },
+                    complete: function () {
+                        $("#loadingDiv").hide();
+                    },
+                    success: function (data) {
+                        $("#products").append(data);
+                        $("#loadingDiv").hide();
+                        inProgress = false;
+                    }
+                });
+            }
+        }
+    });
+</script>
+

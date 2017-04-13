@@ -1,0 +1,98 @@
+﻿@model _1Fix.Entity.SellPhoneOrder
+@{
+    ViewBag.Title = "ReturnUrl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var status = ViewBag.Status;
+}
+
+<div class="container ">
+    <!--nav -->
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="javascript:;"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我要购买>支付结果</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="col-md-1 col-md-17"> </div>
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        @if (status == 1)
+        {
+            <div class="row">
+                <div class="col-xs-3 col-xs-32"><img src="/images/ICON_6.png" class="img-responsive" alt="Responsive image" /></div>
+                <div class="col-xs-9">
+                    <div class="success-1">恭喜您，该笔支付成功！</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <div class="success-2">您的支付方式：支付宝</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <div class="success-2">您的订单号：@Model.OrderNo</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <div class="success-2">您的支付金额：<span class="fontstyle">￥@Model.Totalfee</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-8">
+                    <div class="success-2">
+                        <span class="fontstyle" id="timer">5 </span>秒后自动跳转
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-xs-3 col-xs-32"><img src="/images/ICON_4.png" class="img-responsive" alt="Responsive image" /></div>
+                <div class="col-xs-9">
+                    <div class="Passwordfailure-1">对不起，支付失败！</div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-8" style="margin-left:-5px;">
+                <a href="/User/MyOrder">
+                    <button type="button" class="btn btn-default navbar-btn navbar-btn3">返回个人中心</button>
+                </a>
+            </div>
+        </div>
+        @*<div class="row-001"> </div>*@
+    </div>
+</div>
+<script type="text/javascript">
+    var status = "@status";
+    //倒计时10分钟付款时间
+    var interval = 1000;
+    var totaltime = 5;//5S钟
+    function ShowCountDown(divname) {
+        totaltime = totaltime - 1;
+        var cc = document.getElementById(divname);
+        cc.innerHTML = totaltime;
+        if (totaltime <= 0) {
+            //alert('跳转');
+            window.location.href = "/User/MyOrder";
+        }
+    }
+    if (status == 1) {
+        window.setInterval(function () { ShowCountDown('timer'); }, interval);
+    }
+</script>

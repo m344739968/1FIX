@@ -1,0 +1,108 @@
+﻿@{
+    Layout = null;
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity
+@model PagedList<UserInfo>
+@{ int i = 1;}
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            @*<th>#</th>*@
+            <th>ID</th>
+            <th></th>
+            <th>用户昵称</th>
+            <th>性别</th>
+            <th>所在城市</th>
+            <th>用户类型</th>
+            <th>最后登录时间</th>
+            <th>编辑</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.ID</td>
+                <td>
+                    <img style="border-radius: 50px;vertical-align: middle;width:36px;" src="@item.headimgurl" alt="">
+                </td>
+                <td>@item.nickname</td>
+                <td>
+                    @if (item.sex == 1)
+                    {
+                        <span>男</span>
+                    }
+                    else
+                    {
+                        <span>女</span>
+                    }
+                </td>
+                <td>@item.country - @item.province - @item.city</td>
+                <td>
+                    @if (item.VipGroup == 1)
+                    {
+                        <span style="color:#00ff21">个人用户</span>
+                    }
+                    else if (item.VipGroup == 2)
+                    {
+                        <span style="color:#a49696">企业用户</span>
+                    }
+                    else if (item.VipGroup == 3)
+                    {
+                        <span style="color:#26a0a8">大客户</span>
+                    }
+                </td>
+                <td>@item.lasttime</td>
+                <td class="table-success">
+                    <a href="#" onclick="showModal1(@item.ID)" data-toggle="modal"><i class="fa fa-pencil"></i></a>
+                    @*<a class="delete-row" href=""><i class="fa fa-trash-o"></i></a>*@
+                </td>
+            </tr>
+                    i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-6">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(id){
+        $("#myModal1").modal({
+            remote: "/User/Edit?ID="+id
+        });
+    }
+</script>

@@ -1,0 +1,548 @@
+﻿@using _1Fix.Entity
+@using _1Fix.Entity.Model
+@model CuSellPhone
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<CheckImages> CheckImagesList = ViewBag.CheckImagesList as List<CheckImages>;
+    List<string> listMsg = new List<string>()
+    {
+        "基本全新",
+        "正常磨损",
+        "严重磨损",
+        "无此配置或已损坏"
+    };
+}
+<style>
+    .line {
+        margin: 10px 0 30px;
+        opacity: initial;
+        border-bottom: 1px #ccc solid;
+    }
+</style>
+<script type="text/javascript">
+    var isLogin = "@_1Fix.Common.WeiXinLoginUserManager.IsLogin";
+    function buy(sn) {
+        if (isLogin == "True") {
+            window.location.href = "/Home/Order?sn=" + sn;
+        } else {
+            $("#signin-modal").modal({
+                remote: "/User/Signin?rand=" + Math.random()
+            });
+        }
+    }
+    $(function () { $("div[data-toggle='tooltip']").tooltip(); });
+</script>
+@*<link href="~/css/lightbox.css" rel="stylesheet" />
+    <script src="~/js/lightbox.min.js"></script>*@
+@if (Model == null)
+{
+    <div class="center">哦哦，抱歉，暂无详情</div>
+}
+else
+{
+    <!--body开始-->
+    <div class="center">
+        <!--上部分开始-->
+        <div class="divlisto1">
+            <div class="moddle">
+                <div class="banner" id="b04" style="overflow: hidden; width: 450px; margin-top: 50px; height: 502px; margin-top: 80px;">
+                    @*<ul>
+                        <li><img src="http://Test.1Fix.Cn/Images/Product/358763055712880/201507161117153017.jpg" style="height: auto;height:550px;width:200px;width: auto;" /></li>*@
+                    @*<li><img src="/images/xie.png" width="344" height="500" /></li>
+                            <li><img src="/images/shu-1.png" width="344" height="500" /></li>
+                            <li><img src="/images/shu.png" width="344" height="489" /></li>
+                            <li><img src="/images/xie.png" width="344" height="500" /></li>
+                            <li><img src="/images/shu-1.png" width="344" height="500" /></li>
+                        </ul>*@
+                    <ul>
+                        @foreach (var item in CheckImagesList)
+                        {
+                            <li>
+                                <img src="/Upload/@(item.Sn)/@(item.Image)" style="height:450px;width:450px;" />
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="rightnum">
+                    <span class="iphon"><span class="white1">@Model.CheckFacility.phonename</span>&nbsp;&nbsp;@(Model.CheckFacility.jb)级 &nbsp;@Model.CheckFacility.color &nbsp;@Model.CheckFacility.nettype</span>
+                    <div class="line"></div>
+                    <span class="yuan">
+                        @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                        {
+                            <span>￥ @(Model.SellPhone.PersonPrice)</span>
+                        }
+                        else
+                        {
+                            if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                            {
+                                <span>￥ @(Model.SellPhone.BigCustomerPrice)</span>
+                            }
+                            else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                            {
+                                <span>￥ @(Model.SellPhone.EnterprisePrice)</span>
+                            }
+                            else
+                            {
+                                <span>￥ @(Model.SellPhone.PersonPrice)</span>
+                            }
+                        }
+                    </span> @*<span class="sixeight"> ￥6088 </span>*@
+                    <p>
+                        <span class="yidong">卖家类型：</span>
+                        <span class="type">
+                            @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                            {
+                                <span>个人用户</span>
+                            }
+                            else
+                            {
+                                if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                                {
+                                    <span>大客户</span>
+                                }
+                                else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                                {
+                                    <span>企业客户</span>
+                                }
+                                else
+                                {
+                                    <span>个人用户</span>
+                                }
+                            }
+                        </span>
+                    </p>
+                    <hr class="line" />
+                    <span class="yidong"> 产品编号：@Model.CheckFacility.sn</span>
+                    <hr class="line" />
+                    <span class="yidong"> 手机颜色：@Model.CheckFacility.color </span>
+                    <hr class="line" />
+                    <span class="yidong"> 内存容量：@Model.CheckFacility.size </span>
+                    <hr class="line" />
+                    <a href="javascript:;">
+                        <input type="button" class="buy1" value="立即购买" onclick="buy('@Model.CheckFacility.sn')" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--
+            上部分结束
+          -->
+        <div class="clear"></div>
+        <!--
+            中间开始
+          -->
+        <div class="zhongjian">
+            <div class="darkZhong">
+                <div class="report1"> <span><img src="/images/new_iphone/phone_jb_@(Model.CheckFacility.jb.Trim()).png" /></span> </div>
+                <div class="report2">
+                    <p> <span class="jiancelist">检测报告</span> <span class="numBian">检测编号:TE@(System.Convert.ToDateTime(Model.CheckFacility.CheckDate).ToString("yyyyMMddhhmmss"))</span> </p>
+                    <div class="reportjian">
+                        <div class="q-info">
+                            <div class="DivH40"></div>
+                            <div class="table-1">
+                                <table width="100%" height="50%" class="table02">
+                                    <tr>
+                                        <th style="width: 100px;">产品名称</th>
+                                        <td style="width: 250px;">@Model.CheckFacility.phonename</td>
+                                        <th>产品编号</th>
+                                        <td>@Model.CheckFacility.sn</td>
+                                    </tr>
+                                    <tr>
+                                        <th>内存容量</th>
+                                        <td>
+                                            @Model.CheckFacility.size
+                                        </td>
+                                        <th>产品颜色</th>
+                                        <td>
+                                            @Model.CheckFacility.color
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>检测人员</th>
+                                        <td>@Model.CheckFacility.checkman</td>
+                                        <th>检测日期</th>
+                                        <td>@(Model.CheckFacility.CheckDate)</td>
+                                        <!-- <th>保修情况</th><td>过保</td>-->
+                                    </tr>
+                                </table>
+                                <p class="jiancelist">质检登记的介绍</p>
+                                <div style="margin-top: 18px;">
+                                    <table class="n_table" cellpadding="2">
+                                        <tbody style="height: 135px;">
+                                            <tr>
+                                                <td><img src="/images/icon08.png" /></td>
+                                                <td>
+                                                    <p>Excellent:接近完美</p>
+                                                    <span>接近全新原装机器，几乎无使用痕迹</span>
+                                                </td>
+
+                                                <td><img src="/images/icon09.png" /></td>
+                                                <td>
+                                                    <p>Very Good：精品</p>
+                                                    <span>功能完全正常，轻微难以发现的使用痕迹</span>
+                                            </tr>
+
+                                            <tr>
+                                                <td><img src="/images/icon10.png" /></td>
+                                                <td>
+                                                    <p>Good:良品</p>
+                                                    <span>功能完全正常，轻微使用痕迹</span>
+                                                </td>
+                                                <td><img src="/images/icon11.png" /></td>
+                                                <td>
+                                                    <p>Fair:平白</p>
+                                                    <span>功能完全正常，外观有轻微划痕</span>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--
+            中间结束
+          -->
+        <div class="shiyong">
+            <div class="userlist">
+                <span class="mosun">使用磨损</span>
+                <div class="piclist"><img src="/images/iphone6.png" /></div>
+                <div class="dian dian1" data-toggle="tooltip" data-placement="right" title="后壳：@(listMsg[Convert.ToInt32(Model.CheckFacility.rearcover)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.rearcover).png" /></div>
+                <div class="dian dian2" data-toggle="tooltip" data-placement="right" title="边框左侧：@(listMsg[Convert.ToInt32(Model.CheckFacility.frameleft)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameleft).png" /></div>
+                <div class="dian dian3" data-toggle="tooltip" data-placement="right" title="外屏：@(listMsg[Convert.ToInt32(Model.CheckFacility.glass)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.glass).png" /></div>
+                <div class="dian dian4" data-toggle="tooltip" data-placement="right" title="边框右侧：@(listMsg[Convert.ToInt32(Model.CheckFacility.frameright)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameright).png" /></div>
+                <div class="dian dian5" data-toggle="tooltip" data-placement="right" title="边框底部：@(listMsg[Convert.ToInt32(Model.CheckFacility.framebottom)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.framebottom).png" /></div>
+                <div class="dian dian6" data-toggle="tooltip" data-placement="right" title="边框顶部：@(listMsg[Convert.ToInt32(Model.CheckFacility.frametop)])"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frametop).png" /></div>
+                @*<div class="zhushi"> 注：点击<img src="/images/dian.gif" />图标看实物大图 </div>*@
+            </div>
+        </div>
+    </div>
+    <!--
+      底部开始
+    -->
+    <div class="pink">
+        <div class="pinkDark">
+            <div class="report_bd">
+                <div class="config-table">
+                    <span class="mosun"> 功能检测 </span>
+                    <div class="config_legend clearfix">
+                        <div class="legenf-item"><span style="margin-right: 5px;"><img src="/images/new_iphone/config_normal_0.png" /></span><span>基本全新</span></div>
+                        <div class="legenf-item"><span style="margin-right: 5px;"><img src="/images/new_iphone/config_normal_1.png" /></span><span>正常磨损</span></div>
+                        <div class="legenf-item"><span style="margin-right: 5px;"><img src="/images/new_iphone/config_normal_2.png" /></span><span>严重磨损</span></div>
+                        <div class="legenf-item"><span style="margin-right: 5px;"><img src="/images/new_iphone/config_normal_3.png" /></span><span>无此配置或已损坏</span></div>
+                    </div>
+                    <div class="config-detail" id="function_test">
+                        <div class="detail-box config-left">
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">边框顶部</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frametop).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">边框底部</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.framebottom).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">边框左侧</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameleft).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">边框右侧</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.frameright).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">后壳</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.rearcover).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">外屏</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.glass).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">底部螺丝</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.bottomscrew).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">亮度调节</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.brightness).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="con-state">
+                                        <div class="wightSpan">边框屏幕白黑红色右侧</div>
+                                        <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.whiteblackreddisplay).png" class="picImag" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">触摸灵敏度</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.sensitivity).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">开机键</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.powerbutton).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">升音量键</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.volumeup).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">开机排线</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.PowerCable).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">返回排线</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.HomeButtonCable).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-box config-left">
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">降音量键</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.volumedown).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">Home键</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.homebutton).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">卡槽</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.cardslot).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">受潮情况</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.wet).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">内部标识</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.insidelabel).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">屏蔽罩</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.shield).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">零部件位置</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.Partslocation).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">陀螺内齿</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.screwtooth).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">Wi-Fi</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.wifi).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">蓝牙</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.bluetooth).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">听筒</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.receiver).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">麦克风</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.microphone).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">侧键排线</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.FrameButtonCable).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">硬盘套件</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.disks).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">陀螺仪</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.gyroscope).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">照相</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.camera).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">信号</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.signal).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">耳机插口</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.headsethole).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">充电插口</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.chargehole).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">指纹功能</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.fingerprint).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">闪光灯</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.flash).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">摄像</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.shooting).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="con-state">
+                                        <div class="wightSpan">电池</div>
+                                        <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.battery).png" class="picImag" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">振动</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.vibration).png" class="picImag" /></div>
+                                </div>
+                            </div>
+
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">铃声</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.speaker).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">CPU</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.CPU).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                            <div class="config-item-clearfix1">
+                                <div class="config-name"></div>
+                                <div class="config-cont">
+                                    <div class="wightSpan">尾插排线</div>
+                                    <div class="wightSpan1"><img src="/images/new_iphone/config_normal_@(Model.CheckFacility.ChargeCable).png" class="picImag" /></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+      底部开始
+    -->
+    <!--
+      body结束
+    -->
+}

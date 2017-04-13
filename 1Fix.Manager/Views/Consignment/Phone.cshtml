@@ -1,0 +1,279 @@
+﻿@{
+    Layout = null;
+}
+@using _1Fix.Entity
+@model CheckFacility
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+    <h4 class="modal-title">检测报告</h4>
+</div>
+<div class="modal-body">
+    @if (Model == null) {
+        <div>暂无检测报告...</div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-info">
+                    <tr>
+                        <td style="padding:3px;">产品名称</td>
+                        <td style="padding:3px;">@Model.phonename</td>
+                        <td style="padding:3px;">产品编号</td>
+                        <td style="padding:3px;">@Model.sn</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;">型号</td>
+                        <td style="padding:3px;">@Model.model</td>
+                        <td style="padding:3px;">国别</td>
+                        <td style="padding:3px;">@Model.country</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;">合约机</td>
+                        <td style="padding:3px;">@(Model.Contractmachine == 0 ? "非合约机" : "合约机")</td>
+                        <td style="padding:3px;">产品颜色</td>
+                        <td style="padding:3px;">@Model.color</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;">ICLOUD锁</td>
+                        <td style="padding:3px;">@(Model.@lock == "0" ? "否" : "是")</td>
+                        <td style="padding:3px;">内存容量</td>
+                        <td style="padding:3px;">@Model.size</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;">检测人员</td>
+                        <td style="padding:3px;">@Model.checkman</td>
+                        <td style="padding:3px;">检测日期</td>
+                        <td style="padding:3px;">@Model.CheckDate</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:5px; padding:5px 0px 10px 0px;">
+            <div class="col-sm-12">
+                <span>基本全新</span>
+                <i class="fa fa-circle icon-c0"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span>有微小划痕/掉漆</span>
+                <i class="fa fa-circle icon-c1"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span>有少量划痕/掉漆</span>
+                <i class="fa fa-circle icon-c2"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span>屏幕有裂痕/壳上有凹陷</span>
+                <i class="fa fa-circle icon-c3"></i>
+
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4"><span>边框顶部</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.frametop)"></i></span></div>
+            <div class="col-sm-4"><span>降音量键</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.volumedown)"></i></span></div>
+            <div class="col-sm-4"><span>陀螺仪</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.gyroscope)"></i></span></div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4"><span>边框底部</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.framebottom)"></i></span></div>
+            <div class="col-sm-4"><span>Home键</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.homebutton)"></i></span></div>
+            <div class="col-sm-4"><span>照相</span><span class="icon-right"><i class="fa fa-circle icon-c@(Model.camera)"></i></span></div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>边框左侧</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.frameleft)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>卡槽</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.cardslot)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>信号</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.signal)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>边框底部</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.framebottom)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>Home键</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.homebutton)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>照相</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.camera)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>边框左侧</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.frameleft)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>卡槽</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.cardslot)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>信号</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.signal)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>边框右侧</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.frameright)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>受潮情况</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.wet)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>耳机插口</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.headsethole)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>后壳</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.rearcover)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>内部标识</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.insidelabel)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>充电插口</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.chargehole)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>外屏</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.glass)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>屏蔽罩</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.shield)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>指纹功能</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.fingerprint)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>底部螺丝</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.bottomscrew)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>零部件位置</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.Partslocation)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>闪光灯</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.flash)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>亮度调节</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.brightness)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>螺丝内齿</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.screwtooth)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>摄像</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.shooting)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>屏幕白黑红色</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.whiteblackreddisplay)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>Wi-Fi</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.wifi)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>电池</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.battery)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>触摸灵敏度</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.sensitivity)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>蓝牙</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.bluetooth)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>开机键</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.powerbutton)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>听筒</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.receiver)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>升音量键</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.volumeup)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>麦克风</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.microphone)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>震动</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.vibration)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>铃声</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.speaker)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>开机排线</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.PowerCable)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>侧键排线</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.FrameButtonCable)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>尾插排线</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.ChargeCable)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>返回排线</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.HomeButtonCable)"></i></span>
+            </div>
+        </div>
+        <div class="row" style="padding:1px;">
+            <div class="col-sm-4">
+                <span>wifi模块</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.wifi)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>硬盘套件</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.disks)"></i></span>
+            </div>
+            <div class="col-sm-4">
+                <span>CPU</span>
+                <span class="icon-right"><i class="fa fa-circle icon-c@(Model.CPU)"></i></span>
+            </div>
+
+        </div>
+    }
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+</div>

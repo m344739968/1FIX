@@ -1,0 +1,504 @@
+﻿@using _1Fix.Entity
+@using _1Fix.Entity.Model
+@using _1Fix.Common
+@{
+
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var UserAddressList = ViewBag.UserAddressList as List<UserAddress>;
+    var DefaultUserAddress = UserAddressList.Where(n => n.is_default == 1).FirstOrDefault();
+    var CuSellPhone = ViewBag.CuSellPhone as CuSellPhone;
+    var IsDefault = DefaultUserAddress == null ? 0 : 1;
+}
+<style type="text/css">
+    .time1-active {
+        background-color: #ff971b;
+    }
+
+    label.error {
+        color: #ff0000;
+        font-style: normal;
+        font-size: 12px;
+        line-height: 35px;
+        padding-left: 10px;
+    }
+
+    div.btn input {
+        background: #ff971b none repeat scroll 0 0;
+        border: 1px solid #f08300;
+        color: #fff;
+        cursor: pointer;
+        display: block;
+        float: left;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        margin-right: 15px;
+        text-align: center;
+        text-decoration: none;
+        width: 120px;
+    }
+
+    button, input, select, textarea {
+        font-family: inherit;
+        font-size: inherit;
+        line-height: initial;
+    }
+</style>
+<!--省市区三级联动-->
+<script src="~/js/PCASClass.js" charset="gb2312"></script>
+<div class="tablemain">
+    <div class="center W1024">
+        @using (Ajax.BeginForm("SaveUserAddress", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editUserAddressForm" }))
+        {
+            <div class="user_data">
+                <h2>
+                    收货信息
+                    <span class='Modify' id="" style="cursor:pointer;" onclick="updateAddress(this,1)">修改</span>
+                    <span class='Modify' id="btnAddressTxt" style="cursor:pointer;" onclick="updateAddress(this,0)">新建</span>
+                </h2>
+                <div class="DivH20"></div>
+                <div class="data-box">
+                    <div id="addressList" style="display:none;">
+                        <table class="table01">
+                            @if (UserAddressList != null && UserAddressList.Count > 0)
+                            {
+                                foreach (var item in UserAddressList)
+                                {
+                                    <tr id="@item.ID">
+                                        <td><input type="radio" id="@item.ID" name="radioAddress" /></td>
+                                        <td>@item.user_name</td>
+                                        <td>@item.user_phone</td>
+                                        <td>@item.touch_time</td>
+                                        <td>@item.user_mail</td>
+                                        <td>@item.province @item.city @item.area @item.user_address</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                        <div class="btn">
+                            <input type="button" value="确定" onclick="selAddress()" />
+                            <input type="button" value="新建地址" onclick="newAddress()" />
+                        </div>
+                    </div>
+                    <div id="defaultAddress" style="display:none;">
+                        <table class="table01">
+                            <tr>
+                                <th>您的姓名: </th>
+                                <td id="selName">
+                                    @(DefaultUserAddress == null ? "" : DefaultUserAddress.user_name)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>手机号码: </th>
+                                <td id="selPhone">
+                                    @(DefaultUserAddress == null ? "" : DefaultUserAddress.user_phone)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>联系时段：</th>
+                                <td id="selTime">
+                                    @(DefaultUserAddress == null ? "" : DefaultUserAddress.touch_time)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>E-mail：</th>
+                                <td id="selMail">
+                                    @(DefaultUserAddress == null ? "" : DefaultUserAddress.user_mail)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>用户地址：</th>
+                                <td id="selAddress">
+                                    @(DefaultUserAddress == null ? "" : UserAddressList[0].province + UserAddressList[0].city + UserAddressList[0].area + UserAddressList[0].user_address)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="newAddress" style="display:none">
+                        <table class="table01">
+                            <tr>
+                                <th>您的姓名: </th>
+                                <td class="htmlColor">
+                                    <input id="user_name" name="user_name" type="text" class="txt txt01 NumDecText" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>手机号码: </th>
+                                <td class="htmlColor">
+                                    <input id="user_phone" name="user_phone" type="text" class="txt txt02 NumDecText" />
+                                    &nbsp;
+                                    <input name="获取验证码" id="btnSendPhone" onclick="sendPhoneValidCode(this)" type="text" value="获取验证码" class="telnumber">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>手机验证码：</th>
+                                <td class="htmlColor">
+                                    <input id="valid_code" name="valid_code" type="text" class="txt txt03" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>联系时段：</th>
+                                <td class="htmlColor">
+                                    <input name="touch_time_" onclick="selTouchTime(this)" type="text" value="9:00-12:00" class="time1" style="line-height:none">
+                                    <input name="touch_time_" onclick="selTouchTime(this)" type="text" value="12:00-18:00" class="time1">
+                                    <input name="touch_time_" onclick="selTouchTime(this)" type="text" value="18:00-21:00" class="time1">
+                                    <input name="touch_time_" onclick="selTouchTime(this)" type="text" value="时间不限" class="time1 time1-active">
+                                    <input type="text" style="display:none" id="touch_time" value="时间不限" name="touch_time" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>E-mail：</th>
+                                <td class="htmlColor">
+                                    <input id="user_mail" name="user_mail" type="text" class="txt txt04" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>用户地址：</th>
+                                <td class="htmlColor">
+                                    <select id="province" name="province"></select>
+                                    &nbsp;
+                                    <select id="city" name="city"></select>
+                                    &nbsp;
+                                    <select id="area" name="area"></select>
+                                    <script type="text/javascript">
+                                        new PCAS("province", "city", "area");
+                                    </script>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>&nbsp; </th>
+                                <td class="htmlColor">
+                                    <input type="text" class="txt txt04" id="user_address" name="user_address" placeholder="您的详细信息" value="" />
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="btn">
+                            <input name="submit" type="submit" onclick="beforeSubmitAddress()" class="on ok-btn02" value="保存" />
+                            <div class="clear"></div>
+                            <div class="DivH20"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="DivH20"></div>
+        }
+    </div>
+    <div class="order1">
+        @using (Ajax.BeginForm("SaveOrder", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "successOrder" }, new { id = "UserOrderForm" }))
+        {
+            <div class="order-1"> 订单信息</div>
+            <div class="order-2">
+                <table width="950" border="1">
+                    <tr>
+                        <td width="102" height="52">&nbsp;</td>
+                        <td width="158">名称</td>
+                        <td width="292">编号</td>
+                        <td width="258">基本信息</td>
+                        <td width="60">数量</td>
+                        <td width="238">价格</td>
+                    </tr>
+                    <tr>
+                        <td height="97"><img width="51" height="78" src="/images/new_iphone/@(CuSellPhone.CheckFacility.phonename)_@(_1Fix.Utility.ImageHelper.GetImageColor(CuSellPhone.CheckFacility.color)).png"></td>
+                        <td>@(CuSellPhone.CheckFacility.phonename)</td>
+                        <td>@(CuSellPhone.CheckFacility.sn)</td>
+                        <td>@(CuSellPhone.CheckFacility.color) @(CuSellPhone.CheckFacility.size)  @(CuSellPhone.CheckFacility.jb)级</td>
+                        <td>1</td>
+                        <td>
+                            @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                            {
+                                <span>￥ @(CuSellPhone.SellPhone.PersonPrice)</span>
+                            }
+                            else
+                            {
+                                if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                                {
+                                    <span>￥ @(CuSellPhone.SellPhone.BigCustomerPrice)</span>
+                                }
+                                else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                                {
+                                    <span>￥ @(CuSellPhone.SellPhone.EnterprisePrice)</span>
+                                }
+                                else
+                                {
+                                    <span>￥ @(CuSellPhone.SellPhone.PersonPrice)</span>
+                                }
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="order-3">
+                <span class="btn">
+                    <input type="hidden" id="hidUserAddressID" name="useraddressid" value="@(DefaultUserAddress == null ? 0 : DefaultUserAddress.ID)" />
+                    <input type="hidden" name="sn" value="@CuSellPhone.SellPhone.Sn" />
+
+                    <input type="hidden" name="ordernum" value="1" />
+                    @if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser == null)
+                    {
+                        <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.PersonPrice)" />
+                    }
+                    else
+                    {
+                        if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "3")
+                        {
+                            <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.BigCustomerPrice)" />
+                        }
+                        else if (_1Fix.Common.WeiXinLoginUserManager.CurrLoginUser.VipGroup == "2")
+                        {
+                            <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.EnterprisePrice)" />
+                        }
+                        else
+                        {
+                            <input type="hidden" name="orderprice" value="@(CuSellPhone.SellPhone.PersonPrice)" />
+                        }
+                    }
+                    <input name="submit2" type="submit" onclick="return beforeSubmit()" class="on ok-btn02" value="提交订单" />
+                </span>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    var isLogin = "@_1Fix.Common.WeiXinLoginUserManager.IsLogin";
+    var isDefault = "@IsDefault";
+    if (isDefault == 1) {
+        $("#defaultAddress").css("display", "block");
+    } else {
+        $("#newAddress").css("display", "block");
+    }
+    //提交地址前检测是否登录
+    function beforeSubmitAddress() {
+        if (isLogin != "True") {
+            $("#signin-modal").modal({
+                remote: "/User/Signin?rand=" + Math.random()
+            });
+            return false;
+        }
+    }
+    //提交订单前检测是否登录
+    function beforeSubmit() {
+        if ($("#defaultAddress").css("display") == "none") {
+            alert("请选择收货地址信息");
+            return false;
+        }
+        if ($("#useraddressid").val() == 0 || $("#useraddressid").val() == "") {
+            alert("请选择收货地址信息");
+            return false;
+        }
+        if (isLogin != "True") {
+            $("#signin-modal").modal({
+                remote: "/User/Signin?rand=" + Math.random()
+            });
+            return false;
+        }
+    }
+    //修改地址
+    function updateAddress(obj, t) {
+        if (t == 1) {
+            $("#addressList").css("display", "block");
+            $("#defaultAddress").css("display", "none");
+            $("#newAddress").css("display", "none");
+        } else {
+            $("#newAddress").css("display", "block");
+            $("#defaultAddress").css("display", "none");
+            $("#addressList").css("display", "none");
+        }
+    }
+    //新建地址
+    function newAddress() {
+        $("#addressList").css("display", "none");
+        $("#defaultAddress").css("display", "none");
+        $("#newAddress").css("display", "block");
+    }
+    //选择收货地址
+    function selAddress() {
+        var selRowID = $("input[name='radioAddress']:checked").attr("id");
+        $("#addressList").find("tr").each(function () {
+            if ($(this).attr("id") == selRowID) {
+                $("#selName").text($(this).find("td").eq(1).text());
+                $("#selPhone").text($(this).find("td").eq(2).text());
+                $("#selTime").text($(this).find("td").eq(3).text());
+                $("#selMail").text($(this).find("td").eq(4).text());
+                $("#selAddress").text($(this).find("td").eq(5).text());
+                $("#defaultAddress").css("display", "block");
+                $("#addressList").css("display", "none");
+                $("#hidUserAddressID").val(selRowID);
+            }
+        });
+    }
+    //选择收货时段
+    function selTouchTime(obj) {
+        $("#touch_time").val($(obj).val());
+    }
+    function success(data) {
+        if (data.status == 1) {
+            alert("保存成功");
+            var tr = $("<tr id='" + data.msg + "'></tr>");
+            var td0 = $("<td><input type='radio' id='" + data.msg + "' name='radioAddress' /></td>");
+            var td1 = $("<td>" + $("#user_name").val() + "</td>");
+            var td2 = $("<td>" + $("#user_phone").val() + "</td>");
+            var td3 = $("<td>" + $("#touch_time").val() + "</td>");
+            var td4 = $("<td>" + $("#user_mail").val() + "</td>");
+            var address = $("#province").val() + $("#city").val() + $("#area").val() + $("#user_address").val();
+            var td5 = $("<td>" + address + "</td>");
+            tr.append(td0).append(td1).append(td2).append(td3).append(td4).append(td5);
+            $("#addressList table").append(tr);
+
+            $("#selName").text($("#user_name").val());
+            $("#selPhone").text($("#user_phone").val());
+            $("#selTime").text($("#touch_time").val());
+            $("#selMail").text($("#user_mail").val());
+            $("#selAddress").text(address);
+            $("#defaultAddress").css("display", "block");
+            $("#addressList").css("display", "none");
+            $("#newAddress").css("display", "none");
+            $("#hidUserAddressID").val(data.msg);
+            //window.location.href = "/Consignment/Index";
+        } else if (data.status == -1) {
+            alert("手机验证码失效，请重新获取手机验证码");
+        } else if (data.status == -2) {
+            alert("手机验证码输入不正确");
+        } else {
+            alert("保存失败");
+        }
+    }
+    //提交订单进入支付页面
+    function successOrder(data) {
+        if (data.status > 0) {
+            window.location.href = "/Home/Payment?orderno=" + data.msg;
+        } else if (data.status == -1) {
+            alert("已经被买走，请重新选择商品下单");
+        } else {
+            alert("提交订单失败");
+        }
+    }
+    //全局变量 60s
+    var wait = 60;
+    //计算发送验证码间隔
+    function countTime(o, p) {//o为按钮的对象，p为可选，这里是60秒过后，提示文字的改变
+        var wait = getCookie("wait");// 60;//时间
+        if (wait <= 0) {
+            o.removeAttr("disabled");
+            o.val("获取验证码");//改变按钮中value的值
+            delCookie("wait");
+        } else {
+            o.attr("disabled", true);//倒计时过程中禁止点击按钮
+            o.val(wait + "秒后重新获取验证码");//改变按钮中value的值
+            wait--;
+            setCookie("wait", wait);
+            setTimeout(function () {
+                countTime(o, p);//循环调用
+            },
+            1000)
+        }
+    }
+    //发送手机验证码
+    function sendPhoneValidCode(obj) {
+        var userPhone = $("#user_phone").val();
+        if (userPhone != "") {
+            $.ajax({
+                type: "POST",
+                url: "/Home/SendPhoneValidCode",
+                data: { userPhone: userPhone },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == 1) {
+                        setCookie("wait", 60);//倒计时间隔1分钟
+                        countTime($(obj), null);
+                    } else if (data.status == -1) {
+                        alert("短信接口错误，请重试");
+                    } else {
+                        alert("发送失败，请重试");
+                    }
+                }
+            });
+        } else {
+            alert("请填写手机号码");
+        }
+    }
+
+    $(function () {
+        //计算获取验证码间隔 60秒发送一次
+        if (getCookie("wait")) {
+            countTime($("#btnSendPhone"), null);
+        }
+
+
+        $("input[name='touch_time_']").click(function () {
+            $("input[name='touch_time_']").removeClass("time1-active");
+            $(this).addClass("time1-active");
+            $("#input[name='touch_time']").val($(this).val());
+        });
+        $("#editUserAddressForm").validate({
+            rules: {
+                user_name: {
+                    required: true
+                },
+                user_phone: {
+                    required: true,
+                    number: true
+                },
+                valid_code: {
+                    required: true,
+                    number: true
+                },
+                user_mail: {
+                    required: true,
+                    email: true
+                },
+                province: {
+                    //required: true
+                },
+                city: {
+                    //required: true
+                },
+                area: {
+                    //required: true
+                },
+                user_address: {
+                    required: true
+                }
+            },
+            messages: {
+                user_name: {
+                    required: "请输入姓名"
+                },
+                user_phone: {
+                    required: "请输入手机号码",
+                    number: "手机号码为数字类型"
+                },
+                valid_code: {
+                    required: "请输入手机验证码",
+                    number: "请输入数字类型"
+                },
+                user_mail: {
+                    required: "请输入邮箱地址",
+                    email: "邮箱格式输入不正确"
+                },
+                province: {
+                    required: "请选择省份"
+                },
+                city: {
+                    required: "请选择城市"
+                },
+                area: {
+                    required: "请选择区域"
+                },
+                user_address: {
+                    required: "请输入详细地址"
+                }
+            },
+            highlight: function (element) {
+                //jQuery(element).append('.htmlColor').append().removeClass("has-success").addClass('has-error');
+            },
+            success: function (element) {
+                jQuery(element).closest('.htmlColor').find("i").removeClass('error');
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
+            }
+        });
+    });
+</script>

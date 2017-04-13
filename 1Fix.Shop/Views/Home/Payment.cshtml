@@ -1,0 +1,220 @@
+﻿@using _1Fix.Entity.Model
+@model CuSellPhoneOrder
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ExpireDate = Convert.ToDateTime(Model.SellPhoneOrder.ExpireDate);
+}
+<script type="text/javascript">
+    var yy = "@ExpireDate.Year";
+    var mm = "@ExpireDate.Month";
+    var dd = "@ExpireDate.Day";
+    var hh = "@ExpireDate.Hour";
+    var mi = "@ExpireDate.Minute";
+    var ss = "@ExpireDate.Second";
+    var now = new Date();
+    var endDate = new Date(yy, parseFloat(mm) - 1, dd, hh, mi, ss); //月份要减1，0-11月
+    if (endDate <= now) {
+        alert("该订单已经过期");
+        window.location.href = "/User/Center";
+    }
+    //
+    function selAplipay(obj, id) {
+        if (id == "wxpayImg") {
+            if ($(obj).attr("ischecked") == "0") {
+                $(obj).find("img").attr("src", "/images/pay.png");
+                $(obj).attr("ischecked", "1");
+                $("#" + id).find("img").attr("src", "/images/wxpay.png");
+                $("#" + id).attr("ischecked", "0");
+                $("#paytype").val("1"); //支付宝支付方式
+            } else {
+                $(obj).find("img").attr("src", "/images/alipay.png");
+                $(obj).attr("ischecked", "0");
+                $("#paytype").val("0");
+            }
+        } else if (id == "aplipayImg") {
+            if ($(obj).attr("ischecked") == "0") {
+                $(obj).find("img").attr("src", "/images/wxpayed.png");
+                $(obj).attr("ischecked", "1");
+                $("#" + id).find("img").attr("src", "/images/alipay.png");
+                $("#" + id).attr("ischecked", "0");
+                $("#paytype").val("2"); //微信支付方式
+            } else {
+                $(obj).find("img").attr("src", "/images/wxpay.png");
+                $(obj).attr("ischecked", "0");
+                $("#paytype").val("0");
+            }
+        }
+    }
+    //提交表单，跳转到支付宝页面
+    function alipay() {
+        var paytype = $("#paytype").val();
+        if (paytype == 1) {
+            //支付宝支付
+            $("#apipayForm").submit();
+        } else if (paytype == 2) {
+            //微信支付
+            wxpay();
+        } else {
+            alert("请选择支付方式");
+        }
+    }
+    //取消支付
+    function unAlipay() {
+        if (confirm("确定取消订单吗？")) {
+            window.location.href = "/User/Center";
+        }
+    }
+    //倒计时10分钟付款时间
+    var interval = 1000;
+    function ShowCountDown(divname) {
+        now = new Date();
+        endDate = new Date(yy, parseFloat(mm) - 1, dd, hh, mi, ss); //月份要减1，0-11月
+        var leftTime = endDate.getTime() - now.getTime();
+        var leftsecond = parseInt(leftTime / 1000);
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));
+        var hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);
+        var minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);
+        var second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);
+        var cc = document.getElementById(divname);
+        cc.innerHTML = checkTime(minute) + "分" + checkTime(second) + "秒";
+        if (minute <= 0 && second <= 0) {
+            //alert("到时间了");
+            window.location.href = "/User/Center";
+        }
+    }
+    function checkTime(i) {
+        if (i < 10) {
+            return "0" + i;
+        }
+        return i;
+    }
+    window.setInterval(function () { ShowCountDown('timer'); }, interval);
+</script>
+@using (Html.BeginForm("Submit", "Alipay", FormMethod.Post, new { id = "apipayForm", target = "_blank" }))
+{
+    <div class="payModdle">
+        <div class="tiJiaolist">
+            <p class="font18"><span style="margin-right: 5px;"><img src="/images/img-dui.png" /></span><span>订单提交成功，您可在个人中心-我的订单中查看最新发货信息。</span></p>
+            <p class="font14">请在<span id="timer" style="color:red;">10分03秒</span>内立即完成支付页面</p>
+            <p class="font12">共1张订单：@Model.SellPhoneOrder.OrderNo | 待支付：<span style="color:red;">￥<span id="spanMoeny1">@Model.SellPhoneOrder.OrderPrice</span></span></p>
+        </div>
+        <div class="payListTwo">
+            <div class="payListFirst">
+                <p style="font-size: 18px; padding-top: 50px; padding-left: 20px; color: #666666;">您需要支付：<span style="color:red; font-size: 18px;">￥<span id="spanMoeny2">@Model.SellPhoneOrder.OrderPrice</span></span>元，请选择：</p>
+            </div>
+            <div class="payaunt">
+                <div class="payZFPT2">
+                    支付平台
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="payOnline">
+                <p style="padding-top: 50px; padding-left: 15px;"><img src="/images/cir.png" style="margin-right: 5px;" class="Icon-img" />在线支付平台</p><br /><br />
+                <p class="payPiclist1">
+                    <div class="footer-service">
+                        <i class="iconfont">
+                            <a href="javascript:void(0);" id="aplipayImg" onclick="selAplipay(this, 'wxpayImg')" ischecked="0"><img src="/images/alipay.png" /></a>
+                        </i>
+                        <i>
+                            <a href="javascript:void(0);" id="wxpayImg" onclick="selAplipay(this, 'aplipayImg')" ischecked="0"><img src="/images/wxpay.png" /></a>
+                        </i>
+                    </div>
+                </p>
+            </div>
+            <div class="coupons">
+                @*<span class="coupons-checkbox"><input type="checkbox" /></span>*@<span class="coupons-text">优惠券：<input type="text" onblur="validCoupons(this)" id="couponsno" name="couponsno" class="" placeholder="请输入优惠券编号" /></span>
+                <span id="couponsMsg" style="font-size:12px;"></span>
+                <span style="color: #ff9618; font-size: 12px; ">&nbsp;&nbsp;&nbsp;&nbsp;*使用优惠券立减100元</span>
+            </div>
+            <div>
+                <div class="btnXiao" onclick="alipay()">
+                    <input type="hidden" id="paytype" name="paytype" value="0" />
+                    <input type="hidden" id="orderno" name="orderno" value="@Model.SellPhoneOrder.OrderNo" />
+                    <input type="hidden" id="totalfee" name="totalfee" value="@Model.SellPhoneOrder.OrderPrice" />
+                    <span class="goPay">前往支付</span>
+                </div>
+                <div class="btnXiao-2" onclick="unAlipay()">
+                    <span class="goPay-2">取消订单</span>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="orderlistBiao">
+            <table width="1024" border="1">
+                <tr>
+                    <td width="100" height="52"><span class="typelist001">产品图片</span></td>
+                    <td width="138"><span class="typelist001">名称</span></td>
+                    <td width="300"><span class="typelist001">编号</span></td>
+                    <td width="195"><span class="typelist001">基本信息</span></td>
+                    <td width="60"><span class="typelist001">数量</span></td>
+                    <td width="330"><span class="typelist001">价格</span></td>
+                </tr>
+                <tr>
+                    <td height="97"><img style="width: 45px" src="/Images/new_iphone/@(Model.CheckFacility.phonename)_@(_1Fix.Utility.ImageHelper.GetImageColor(Model.CheckFacility.color)).png" /></td>
+                    <td><span class="typelist001">@Model.CheckFacility.phonename</span></td>
+                    <td><span class="typelist001">@Model.CheckFacility.sn</span></td>
+                    <td><span class="typelist001">@Model.CheckFacility.color @Model.CheckFacility.size @Model.CheckFacility.jb</span></td>
+                    <td><span class="typelist001">1</span></td>
+                    <td><span class="typelist001">￥@Model.SellPhoneOrderDetail.PhonePrice</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+<!--微信支付-->
+<div aria-hidden="true" aria-labelledby="wxpay-modal-label" role="dialog" tabindex="-10" id="wxpay-modal" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#wxpay-modal").on("hidden.bs.modal", function () {
+        $(this).removeData("bs.modal");
+    });
+    //弹出微信支付二维码页面
+    function wxpay() {
+        var orderno = $("#orderno").val();
+        var totalfee = $("#totalfee").val();
+        //window.location.href = "/WxPay/Index?orderno=" + orderno + "&totalfee=" + totalfee + "&rand=" + Math.random();
+        //return false;
+        $("#wxpay-modal").modal({
+            remote: "/WxPay/Index?orderno=" + orderno + "&totalfee=" + totalfee + "&rand=" + Math.random()
+        });
+    }
+    var price = "@Model.SellPhoneOrder.OrderPrice";
+    //检测优惠券是否有效
+    function validCoupons(obj) {
+        var value = $(obj).val();
+        if (value != "") {
+            $.ajax({
+                type: "post",
+                url: "/Alipay/ValidCoupons",
+                data: { couponsno: value },
+                success: function (data) {
+                    if (data.status == 1) {
+                        var newMoney = accSubtr(parseFloat(price), parseFloat(data.msg));
+                        $("#spanMoeny1").text(newMoney);
+                        $("#spanMoeny2").text(newMoney);
+                        $("#totalfee").val(newMoney);
+                        $("#couponsMsg").removeClass("glyphicon glyphicon-remove").addClass("glyphicon glyphicon-ok")
+                            .removeClass("signinFail").addClass("signinSuccess").text(""); return true;
+                    } else {
+                        $("#spanMoeny1").text(price);
+                        $("#spanMoeny2").text(price);
+                        $("#totalfee").val(price);
+                        $("#couponsMsg").removeClass("glyphicon glyphicon-ok").addClass("glyphicon glyphicon-remove")
+                            .removeClass("signinSuccess").addClass("signinFail").text(" 优惠券码无效 "); return false;
+                    }
+                }
+            });
+        } else {
+            $("#spanMoeny1").text(price);
+            $("#spanMoeny2").text(price);
+            $("#totalfee").val(price);
+            $("#couponsMsg").removeClass("glyphicon glyphicon-ok").removeClass("glyphicon glyphicon-remove");
+        }
+    }
+</script>

@@ -1,0 +1,355 @@
+﻿@{
+    Layout = null;
+}
+
+@model _1Fix.Entity.Model.CuPrintCheckFacility
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>移动智能终端检测报告</title>
+    <link href="~/css/1fix/print.1fix.css" rel="stylesheet" />
+</head>
+<body>
+    @if (Model != null)
+    {
+        <div id="contaner">
+            <div class="section section-left">
+                <div id="report">
+                    <img src="/images/report.png" width="345" height="111" />
+                    <table class="table-info">
+                        <tr>
+                            <td class="td1">
+                                <div id="text">
+                                    <div class="letter">手机品牌</div>
+                                    <div class="letter01">BRAND</div>
+                                </div>
+                            </td>
+                            <td class="td2"><p>@Model.Result.Devices.Basic.PhoneName</p></td>
+                            <td class="td3">
+                                <div class="letter">手机型号</div>
+                                <div class="letter01">MODEL</div>
+                            </td>
+                            <td class="td4"><p>@Model.Result.Devices.Basic.Model</p></td>
+                        </tr>
+                        <tr>
+                            <td class="td1">
+                                <div class="letter">IMEI</div>
+                                <div class="letter01">SEARIAL NUMBER</div>
+                            </td>
+                            <td class="td2"><p>@Model.Result.Devices.Basic.IMEI</p></td>
+                            <td class="td3">
+                                <div class="letter">颜色</div>
+                                <div class="letter01">COLOR</div>
+                            </td>
+                            <td class="td4"><p>@Model.Result.Devices.Basic.Color</p></td>
+                        </tr>
+                        <tr>
+                            <td class="td1">
+                                <div class="letter">国别</div>
+                                <p>
+                                    <div class="letter01">NATION</div>
+                            </td>
+                            <td class="td2"><p>@(Model.Result.Devices.Basic.Country)</p></td>
+                            <td class="td3">
+                                <div class="letter">等级</div>
+                                <div class="letter01"> LEVEL </div>
+                            </td>
+                            <td class="td4"><p>@(Model.Result.Devices.Basic.Level)级</p></td>
+                        </tr>
+                        <tr>
+                            <td class="td1">
+                                <div class="letter">网络制式</div>
+                                <div class="letter01"> NETTYPE </div>
+                            </td>
+                            <td class="td2"><p>@(Model.Result.Devices.Basic.Nettype)</p></td>
+                            <td class="td3">
+                                <div class="letter">容量</div>
+                                <div class="letter01">CAPACITY</div>
+                            </td>
+                            <td class="td4"><p>@(Model.Result.Devices.Basic.Size)</p></td>
+                        </tr>
+                        <tr>
+                            <td class="td1">
+                                <div class="letter">保修状况</div>
+                                <div class="letter01">WARRANTY</div>
+                            </td>
+                            <td class="td2">
+                                @*@if (Model.Result.Devices.Basic.Quality == "0")
+                                {
+                                    <p>无保质</p>
+                                }
+                                else if (Model.Result.Devices.Basic.Quality == "3")
+                                {
+                                    <p style="font-size:8px;">保修期：@(Model.Result.Devices.Basic.Quality)个月</p>
+                                }
+                                else if (Model.Result.Devices.Basic.Quality == "6")
+                                {
+                                    <p style="font-size:8px;">保修期：@(Model.Result.Devices.Basic.Quality)个月</p>
+                                }*@
+                            </td>
+                            <td class="td3">
+                                <div class="letter">出库日期</div>
+                                <div class="letter01">OUTDATE</div>
+                            </td>
+                            <td class="td4"><p>@*@System.DateTime.Now.ToString("yyyy/MM/dd")*@</p></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="Appearance">
+                    <div class="line"> </div>
+                    <div class="frame">
+                        <p> <strong class="big">外观</strong><strong>/Appearance </strong> </p>
+                        <div class="images"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>边框顶部/Frame Top </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FrameTop).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>边框底部/Frame Bottom </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FrameBottom).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>边框左侧/Frame Left Side </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FrameLeft).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>边框右侧/Frame Right Side </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FrameRight).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>后壳/Rear Cover </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.RearCover).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>外屏/Glass </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Glass).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>底部螺丝/Bottom Screw </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.BottomScrew).png"> </div>
+                    </div>
+                </div>
+                <div id="function">
+                    <div class="line"> </div>
+                    <div class="frame">
+                        <p> <strong class="big">功能</strong><strong>/Function</strong> </p>
+                        <div class="images"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>wifi/wifi </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.WiFi).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>蓝牙/Blue Tooth </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.BlueTooth).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>听筒/Receiver </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Receiver).png"> </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section section-center">
+                <div id="button">
+                    <div class="frame">
+                        <p> <strong>麦克风/Microphone </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.MicroPhone).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>陀螺仪/Gyroscope </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Gyroscope).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>照相/Camera </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Camera).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>信号/Signal </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Signal).png"> </div>
+                        <div class="images"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>耳机插口/Headset Hole </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.HeadSethole).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>充电插口/Charge Hole </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.ChargeHole).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>指纹功能 /Finger Print </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FingerPrint).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>闪光灯 /Flash </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Flash).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>摄像 /Shooting </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Shooting).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>电池 /Battery </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Battery).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>振动 /Vibration </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Vibration).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>铃声 /Speaker </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Speaker).png"> </div>
+                    </div>
+                    <div class="line screenline"> </div>
+                    <div class="frame">
+                        <p> <strong class="big">按键</strong><strong> /Button</strong> </p>
+                        <div class="images"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>开机键 /Power Button </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.PowerButton).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>升音量键 /Volume Up Button </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.VolumeUp).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>降音量键 /Volume Down Button </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Battery).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>home键 /Home Button </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.HomeButton).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>卡槽 /Card Slot </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.CardSlot).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>静音键 /Mute Button </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.MuteButton).png"> </div>
+                    </div>
+                </div>
+                <div id="screen">
+                    <div class="line"> </div>
+                    <div class="frame">
+                        <p> <strong class="big">内屏</strong><strong>/Screen</strong> </p>
+                        <div class="images"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>亮度调节/Brightness </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Brightness).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>屏幕白黑红色情况 /White Black Red Display </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.WhiteBlackRedDisplay).png"> </div>
+                    </div>
+                    <div class="frame">
+                        <p> <strong>触摸灵敏度 /Sensitivity </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Sensitivity).png"> </div>
+                    </div>
+                    <div class="line" style="padding-top: 0px;"> </div>
+                </div>
+            </div>
+            <div class="section section-right">
+                <div id="situation">
+                    <div class="line-01"> </div>
+                    <div class="frame-01">
+                        <p> <strong class="big-01">内部情况</strong><strong>/Cellphone Inside </strong> </p>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>受潮情况 /Wet </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Wet).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>内部标贴 /Inside Label </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Insidelabel).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>屏蔽罩 /Shield </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Shield).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>螺丝内齿 /Screw Tooth </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Screwtooth).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>开机排线 /Power Cable </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.PowerCable).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>侧键排线 /Frame Button Cable </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.FrameButtonCable).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>尾插排线 /Charge Cable </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.ChargeCable).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>返回排线/Home Button Cable </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.HomeButtonCable).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>wifi模块 /Wifi Ic </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.WiFi).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>硬盘套件/Disk </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.Disks).png"> </div>
+                    </div>
+                    <div class="frame-01">
+                        <p> <strong>CPU/Cpu </strong> </p>
+                        <div class="images"> <img src="/images/icon@(Model.Result.Devices.Information.CPU).png"> </div>
+                    </div>
+                </div>
+                <div class="lineicon"> </div>
+                <div id="icon">
+                    <div class="iconword1">
+                        <img src="/images/iconBig.png" />
+                        <div class="iconword1-1"> 图标颜色与磨损程度说明 </div>
+                        <div class="iconword2"> Iconin the color and the degree of wear and tear </div>
+                    </div>
+                    <div class="iconword">
+                        <div class="iconword3-1">
+                            <div class="iconword3"> 外观：</div>
+                            <div class="iconword4"> 基本全新</div>
+                            <div class="iconword5"> 有微小划痕/掉漆</div>
+                            <div class="iconword6"> 有少量划痕/掉漆</div>
+                            <div class="iconword7">
+                                屏幕有裂痕/<br />
+                                壳上有凹陷
+                            </div>
+                        </div>
+                    </div>
+                    <div class="iconword8">
+                        其他部件：
+                        <div class="iconword9">
+                            正常 <br />
+                            Normal
+                        </div>
+                        <div class="iconword10" style="text-align:center;">
+                            <p>
+                                不正常<br />
+                                Is not normal
+                            </p>
+                            <p>&nbsp; </p>
+                        </div>
+                    </div>
+                    <div class="iconword11">
+                        <div class="iconword12">
+                            万修科技检测中心： test.1fix.cn
+                            <div class="iconword13"> 全国客服服务热线： 400 0045 089 </div>
+                        </div>
+                    </div>
+                </div>
+                <img src="/images/logo.png" width="155" height="31" />
+            </div>
+        </div>
+    }
+</body>
+</html>

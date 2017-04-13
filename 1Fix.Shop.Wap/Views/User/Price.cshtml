@@ -1,0 +1,187 @@
+﻿@using _1Fix.Common.Wap
+@using _1Fix.Entity.Model
+@model CuSellPhone
+@{
+    ViewBag.Title = "Price";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container ">
+    <!--nav -->
+    <div class="nav">
+        <div class="row liDetail">
+            <div class="col-xs-4 col-sm-4 purchasefont"><span class="purchasefont"><span class="purchasefont-00" /><a href="#"><</a></span></div>
+            <div class="col-xs-6 col-sm-4 purchasefont"><span class="purchasefont">我的寄售</span></div>
+            <!-- -->
+            <div class="col-xs-1 col-sm-4">
+                <input type="button" value="&bull;&nbsp;&bull;&nbsp;&bull;" class="btn-click purchasefont1" onclick="test()" />
+            </div>
+        </div>
+        <!-- -->
+        <div class="page-header">
+            @Html.Partial("~/Views/Shared/TopNav.cshtml")
+        </div>
+    </div>
+    <div class="contant">
+        @using (Ajax.BeginForm("SavePrice", "", new AjaxOptions { HttpMethod = "post", OnSuccess = "success" }, new { id = "editPriceForm" }))
+        {
+            <div class="row">
+                <div class="col-xs-9 col-md-8 col-md-8">&nbsp;修改价格 </div>
+                <div class="col-xs-2 col-md-4  col-md-8"> </div>
+            </div>
+            <!-- line -->
+            <div class="row">
+                <div class="line"> </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 col-md-8">&nbsp;小标题： </div>
+                <div class="col-xs-7 col-md-4 phonetext1">
+                    <span class="textcolor02">
+                        <input type="text" name="Title" placeholder="输入小标题" value="@(Model.SellPhone.Title == null ? "" : Model.SellPhone.Title)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                    </span>
+                </div>
+            </div>
+            <!-- line -->
+            <div class="row">
+                <div class="line"> </div>
+            </div>
+            if (WapLoginUserManager.CurrLoginUser.VipGroup == "1")
+            {
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;个人用户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="PersonPrice" placeholder="输入个人用户价格" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+            }
+            if (WapLoginUserManager.CurrLoginUser.VipGroup == "2")
+            {
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;个人用户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="PersonPrice" placeholder="输入个人用户价格" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;企业用户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="EnterprisePrice" placeholder="输入企业用户价格" value="@(Model.SellPhone.EnterprisePrice == null ? 0 : Model.SellPhone.EnterprisePrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+            }
+            if (WapLoginUserManager.CurrLoginUser.VipGroup == "3")
+            {
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;个人用户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="PersonPrice" placeholder="输入个人用户价格" value="@(Model.SellPhone.PersonPrice == null ? 0 : Model.SellPhone.PersonPrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;企业用户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="EnterprisePrice" placeholder="输入企业用户价格" value="@(Model.SellPhone.EnterprisePrice == null ? 0 : Model.SellPhone.EnterprisePrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 col-md-8">&nbsp;大客户价格： </div>
+                    <div class="col-xs-7 col-md-4 phonetext1">
+                        <span class="textcolor02">
+                            <input type="text" name="BigCustomerPrice" placeholder="输入大客户价格" value="@(Model.SellPhone.BigCustomerPrice == null ? 0 : Model.SellPhone.BigCustomerPrice)" class="textWord-04" style="border-style: none; background: #f7f7f7; " />
+                        </span>
+                    </div>
+                </div>
+                <!-- line -->
+                <div class="row">
+                    <div class="line"> </div>
+                </div>
+            }
+            <!-- price -->
+            <input type="hidden" name="id" value="@Model.SellBaseInfo.ID" />
+            <input type="hidden" name="Sn" value="@Model.SellBaseInfo.Sn" />
+            <a href="javascript:;" onclick="savePrice()"><span class="btn btn-default navbar-btn navbar-btn3">保存</span></a>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    function success(data) {
+        if (data.status == 1) {
+            window.location.href = "/User/MySell";
+        } else if (data.status == -1) {
+            alert("已经被下单或者付款，不能再修改价格");
+        } else {
+            alert("保存失败");
+        }
+    }
+    function savePrice() {
+        $("#editPriceForm").submit();
+    }
+    jQuery("#editPriceForm").validate({
+        rules: {
+            Title: {
+                required: true
+            },
+            PersonPrice: {
+                required: true,
+                number: true
+            },
+            EnterprisePrice: {
+                required: true,
+                number: true
+            },
+            BigCustomerPrice: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            Title: {
+                required: "请输入小标题"
+            },
+            PersonPrice: {
+                required: "请输入个人用户价格",
+                number: "请输入数字类型"
+            },
+            EnterprisePrice: {
+                required: "请输入企业用户价格",
+                number: "请输入数字类型"
+            },
+            BigCustomerPrice: {
+                required: "请输入大客户价格",
+                number: "请输入数字类型"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+</script>

@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+@using Webdiyer.WebControls.Mvc
+@using _1Fix.Entity
+@model PagedList<SellBaseInfo>
+@{ int i = 1;}
+<table class="table table-success mb30">
+    <thead>
+        <tr>
+            @*<th>#</th>*@
+            <th>ID</th>
+            <th>寄卖人</th>
+            <th>寄卖产品</th>
+            <th>联系电话</th>
+            <th>IMEI</th>
+            <th>快递单号</th>
+            <th>寄卖时间</th>
+            <th>IP地址</th>
+            <th>审核状态</th>
+            <th>审核备注</th>
+            <th>检测报告</th>
+            <th>图片录入</th>
+            <th>审核</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@((Model.CurrentPageIndex - 1) * Model.PageSize + i)</td>*@
+                <td>@item.ID</td>
+                <td>@item.ContactName</td>
+                <td>@item.PhoneModel</td>
+                <td>@item.ContactPhone</td>
+                <td>@item.Sn</td>
+                <td>@item.CourierNo</td>
+                <td>@item.AddDate</td>
+                <td>@item.IPAddress</td>
+                <td>
+                    @if (item.Status == 0)
+                    {
+                        <span style="">未审核</span>
+                    }
+                    else if (item.Status == 1)
+                    {
+                        <span style="">已审核</span>
+                    }
+                    else if (item.Status == 2)
+                    {
+                        <span style="">审核不通过</span>
+                    }
+                </td>
+                <td>
+                    @item.Remark
+                </td>
+                <td class="table-success" style="text-align:left;">
+                    <a href="#" onclick="showModal1('@item.Sn')" data-toggle="modal"><i class="fa fa-list-alt"></i></a>
+                    @*<a class="delete-row" href=""><i class="fa fa-trash-o"></i></a>*@
+                </td>
+                <td>
+                    <a href="#" onclick="showModal3(@item.ID,'@item.Sn')" data-toggle="modal"><i class="fa fa-file-picture-o"></i></a>
+                </td>
+                <td style="text-align:left;">
+                    <a href="#" onclick="showModal2(@item.Status,@item.ID)" data-toggle="modal"><i class="fa fa-ticket"></i></a>
+                </td>
+            </tr>
+                    i++;
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-6">
+        <span class="total">共 @Model.TotalPageCount 页 @Model.TotalItemCount 条记录，当前为第 @Model.CurrentPageIndex 页</span>
+    </div>
+    <div class="col-md-6">
+        @Ajax.Pager(Model,
+            new PagerOptions
+            {
+                PageIndexParameterName = "PageIndex",
+                CssClass = "paging",
+                ShowFirstLast = true,
+                AlwaysShowFirstLastPageNumber = true,
+                ShowMorePagerItems = true,
+                NumericPagerItemCount = 5,
+                CurrentPagerItemWrapperFormatString = "<span class=\"current\">{0}</span>",
+                NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>",
+                NavigationPagerItemWrapperFormatString = "<span class=\"navigation\">{0}</span>"
+            },
+            new MvcAjaxOptions
+            {
+                UpdateTargetId = "divList",
+                DataFormId = "divForm"
+            }, new { id = "" })
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal1").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //弹出检测报告
+    function showModal1(sn){
+        $("#myModal1").modal({
+            remote: "/Consignment/Phone?sn="+sn
+        });
+    }
+
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal2").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //弹出审核
+    function showModal2(status,id){
+        if(status==0){
+            $("#myModal2").modal({
+                remote: "/Consignment/Audit?id="+id
+            });
+        }else
+        {
+            alert("已经审核过，不能再操作");
+        }
+    }
+
+    //隐藏Modal时候删除modal内容数据，达到再次加载URL的内容
+    $("#myModal3").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+    });
+    //弹出审核
+    function showModal3(id,sn){
+        $("#myModal3").modal({
+            remote: "/Consignment/PhoneImage?id="+id+"&sn="+sn
+        });
+    }
+</script>
